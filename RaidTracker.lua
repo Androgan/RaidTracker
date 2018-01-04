@@ -1,36 +1,59 @@
 local track = false
 local trackedZones = {"Molten Core", "Blackwing Lair", "Ironforge"}
+local daytime = ""
 
-local frame = CreateFrame("FRAME", "RaidTrackerFrame");
-frame:RegisterEvent("ZONE_CHANGED_INDOORS");
-frame:RegisterEvent("ZONE_CHANGED");
-frame:RegisterEvent("ZONE_CHANGED_NEW_AREA");
-frame:RegisterEvent("RAID_ROSTER_UPDATE");
+function RaidTracker_OnLoad()
+  this:RegisterEvent("ZONE_CHANGED_NEW_AREA");
+  this:RegisterEvent("ZONE_CHANGED_INDOORS");
+  this:RegisterEvent("ZONE_CHANGED");
+  
+  this:RegisterEvent("RAID_ROSTER_UPDATE");
+end
 
-function eventHandler(self, event, ...)
-  if(event == "ZONE_CHANGED_NEW_AREA") then
-    myPrint("0");
-    -- checkTracking();
-    myPrint("0.5");
+function RaidTracker_OnEvent(event)
+  pPrint("event Occured");
+  if(event == "ZONE_CHANGED_NEW_AREA" or
+     event == "ZONE_CHANGED_INDOORS" or
+     event == "ZONE_CHANGED") then
+    pPrint("zone change");
+    trackAttendance();
   end
   
-  if (event == "RAID_ROSTER_UPDATE") then
-    myPrint("1");
+  if(event == "RAID_ROSTER_UPDATE") then
+    pPrint("roster update");
     trackAttendance();
   end
 end
-frame:SetScript("OnEvent", eventHandler);
 
 -- ----------------------------------------------------------------------------
 
 function trackAttendance()
+  local numRaidMembers = 0
+  local raidMembers = {}
+  local name = ""
+  
+  checkTracking();
+  
   if(track) then
-    myPrint("2");
+    pPrint("tracking");
+    
+    if(daytime == "") then
+      daytime = date();
+    end
+    
+    numRaidMembers = GetNumRaidMembers();
+    for x = 1, numRaidMembers, 1 do
+      name = GetRaidRosterInfo(x);
+      raidMembers[x] = name
+    end
+    
+  else
+    pPrint("not tracking");
   end
 end
 
 function checkTracking()
-  track = searchZone(GetZoneName());
+  track = searchZone(GetZoneText());
 end
 
 function searchZone(zoneName)
@@ -42,6 +65,6 @@ function searchZone(zoneName)
   return false
 end
 
-function myPrint(text)
-  DEFAULT_CHAT_FRAME:AddMessage("RaidTracker: " ..text);
+function pPrint(text)
+  DEFAULT_CHAT_FRAME:AddMessage("RaidTracker: " .. text);
 end

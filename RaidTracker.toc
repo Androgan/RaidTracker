@@ -1,4 +1,5 @@
 ## Interface: 11200
 ## Title: RaidTracker
 ## Notes: Raid Attendance Tracker For VanillaWoW
-RaidTracker.lua
+## SavedVariablesPerCharacter: RaidAttendance
+RaidTracker.xml
