@@ -28,31 +28,32 @@ function empty()
   
 function RaidTrackerUI_CreateFontstring(text, x, y)
 	
-	local TemplateFrame = CreateFrame("Button",nil,RaidTrackerGUI)
-	TemplateFrame:SetPoint("LEFT",RaidTrackerGUI, "CENTER", x , y)
-	TemplateFrame:SetWidth(200)
-	TemplateFrame:SetHeight(15)
-	TemplateFrame:SetBackdrop({bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background"})
-	TemplateFrame:SetScript("OnClick",  function(self, button, down) RaidTrackerUI_SelectDate(self) end)
-		
-	local TemplateFontString = TemplateFrame:CreateFontString(nil, "OVERLAY")
+	local DummyFrame = CreateFrame("Frame",nil,RaidTrackerGUI)
+	DummyFrame:Hide()
+
+	local TemplateFontString = DummyFrame:CreateFontString(nil, "OVERLAY", RaidTrackerGUI)
 	TemplateFontString:SetPoint("LEFT", RaidTrackerGUI, "CENTER", x, y)
 	TemplateFontString:SetFont("Fonts\\FRIZQT__.TTF", 9)
 	TemplateFontString:SetWidth(200)
 	TemplateFontString:SetJustifyH("LEFT")
 	TemplateFontString:SetText(text) 
 
+	
+	local TemplateFrame = CreateFrame("Button",nil,RaidTrackerGUI)
+	TemplateFrame:SetPoint("LEFT",RaidTrackerGUI, "CENTER", x , y)
+	TemplateFrame:SetWidth(200)
+	TemplateFrame:SetHeight(15)
+	TemplateFrame:SetBackdrop({bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background"})
+	TemplateFrame:SetScript("OnClick",  RaidTrackerUI_SelectDate )	
+	TemplateFrame:SetFont("Fonts\\FRIZQT__.TTF", 9)
+	TemplateFrame:SetFontString(TemplateFontString)
+
 
  
 end
 
-function RaidTrackerUI_SelectDate(frame)
-	--if frame:GetHeight() == nil then
-	--	pPrint("NIL")
-	--else
-	--	pPrint(frame:GetHeight())
-	--end
-pPrint("Buttons")
+function RaidTrackerUI_SelectDate()
+	pPrint(this:GetText())
 end
 
 --	["01/06/18 17:54:54"] = {
