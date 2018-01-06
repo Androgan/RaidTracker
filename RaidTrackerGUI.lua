@@ -24,6 +24,7 @@ function RaidTracker_OnEvent(event)
      event == "ZONE_CHANGED_INDOORS" or
      event == "ZONE_CHANGED") then
     zoneChangeEventHandler();
+    -- mergeDuplicates();
   end
   
   if(event == "RAID_ROSTER_UPDATE") then
