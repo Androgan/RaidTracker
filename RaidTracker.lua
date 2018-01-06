@@ -1,4 +1,4 @@
-local trackedZones = {"The Molten Core", "Blackwing Lair", "Ironforge"}
+local trackedZones = {"The Molten Core", "Blackwing Lair", "Ironforge", "City of Ironforge"}
 local starttime = ""
 local raidZone = ""
 local numRaidMembers = 0
@@ -19,7 +19,7 @@ function RaidTracker_OnEvent(event)
   if(event == "ZONE_CHANGED_NEW_AREA" or
      event == "ZONE_CHANGED_INDOORS" or
      event == "ZONE_CHANGED") then
-    trackAttendance();
+    zoneChangeEventHandler();
   end
   
   if(event == "RAID_ROSTER_UPDATE") then
@@ -30,6 +30,15 @@ function RaidTracker_OnEvent(event)
 end
 
 -- ----------------------------------------------------------------------------
+
+function zoneChangeEventHandler()
+  if(raidZone ~= GetZoneText()) then
+    starttime = ""
+    raidZone = ""
+  end
+
+  trackAttendance();
+end
 
 function trackAttendance()
   local raidMembers = {}
@@ -67,6 +76,7 @@ function fillSaved(raidMembers)
   
   newRaid["zone"] = raidZone;
   newRaid["member"] = raidMembers;
+  newRaid["date"] = starttime;
   
   RaidAttendance[starttime] = newRaid;
 end
