@@ -36,7 +36,6 @@ function RaidTracker_OnEvent(event)
      reset) then
     RaidAttendance = {}
   elseif(event == "PLAYER_LOGOUT") then
-    pPrint("logging out event");
     mergeDuplicates();
   end
 end
@@ -114,19 +113,14 @@ function mergeDuplicates()
   local secondMembers = {}
   local additionalMembers = {}
   
-  pPrint("merging");
-  
   for k, tbl in pairs(RaidAttendance) do
-    datetime = k
+    datetime = tbl["date"]
     zone = tbl["zone"]
     
-    pPrint(datetime);
-    
     for kx, tblx in pairs(RaidAttendance) do
-      pPrint(kx);
       if(isSameDay(datetime, kx) and
-         zone == tblx["zone"]) then
-        pPrint("is same");
+         zone == tblx["zone"] and
+         not isSameTime(datetime, kx)) then
         firstMembers = tbl["member"]
         secondMembers = tblx["member"]
         for member, _ in pairs(secondMembers) do
@@ -134,7 +128,7 @@ function mergeDuplicates()
             firstMembers[member] = true
           end
         end
-        -- RaidAttendance[kx] = nil
+        RaidAttendance[kx] = nil
       end
     end
   end
@@ -142,6 +136,10 @@ end
 
 function isSameDay(dateX, dateY)
   return (string.sub(dateX, 1, 8) == string.sub(dateY, 1, 8))
+end
+
+function isSameTime(dateX, dateY)
+  return (dateX == dateY)
 end
 
 -- ----------------------------------------------------------------------------
