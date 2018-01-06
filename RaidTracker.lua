@@ -1,6 +1,7 @@
-local track = false
-local trackedZones = {"Molten Core", "Blackwing Lair", "Ironforge"}
-local daytime = ""
+local trackedZones = {"The Molten Core", "Blackwing Lair"}
+local starttime = ""
+local raidZone = ""
+local numRaidMembers = 0
 
 function RaidTracker_OnLoad()
   this:RegisterEvent("ZONE_CHANGED_NEW_AREA");
@@ -11,60 +12,82 @@ function RaidTracker_OnLoad()
 end
 
 function RaidTracker_OnEvent(event)
-  pPrint("event Occured");
   if(event == "ZONE_CHANGED_NEW_AREA" or
      event == "ZONE_CHANGED_INDOORS" or
      event == "ZONE_CHANGED") then
-    pPrint("zone change");
     trackAttendance();
   end
   
   if(event == "RAID_ROSTER_UPDATE") then
-    pPrint("roster update");
-    trackAttendance();
+    if(playerLeaveOrEnter()) then
+      trackAttendance();
+    end
   end
 end
 
 -- ----------------------------------------------------------------------------
 
 function trackAttendance()
-  local numRaidMembers = 0
   local raidMembers = {}
   local name = ""
   
-  checkTracking();
-  
-  if(track) then
-    pPrint("tracking");
+  if(checkTracking()) then
+    if(starttime == "") then
+      starttime = date();
+    end
     
-    if(daytime == "") then
-      daytime = date();
+    if(raidZone == "") then
+      raidZone = GetZoneText();
     end
     
     numRaidMembers = GetNumRaidMembers();
     for x = 1, numRaidMembers, 1 do
       name = GetRaidRosterInfo(x);
-      raidMembers[x] = name
+      raidMembers[name] = true
     end
-    
-  else
-    pPrint("not tracking");
+    fillSaved(raidMembers);
   end
 end
 
 function checkTracking()
-  track = searchZone(GetZoneText());
+  local track = false
+  
+  track = searchInTable(GetZoneText(), trackedZones);
+  track = track and (GetNumRaidMembers() > 0);
+  
+  return track
 end
 
-function searchZone(zoneName)
-  for _, v in pairs(trackedZones) do
-    if(v == zoneName) then
+function fillSaved(raidMembers)
+  local newRaid = {}
+  
+  newRaid["zone"] = raidZone;
+  newRaid["member"] = raidMembers;
+  
+  RaidAttendance[starttime] = newRaid;
+end
+
+function searchInTable(search, tbl)
+  for _, v in pairs(tbl) do
+    if(v == search) then
       return true
     end
   end
   return false
 end
 
+function playerLeaveOrEnter()
+  return numRaidMembers ~= GetNumRaidMembers()
+end
+
+-- ----------------------------------------------------------------------------
+
 function pPrint(text)
   DEFAULT_CHAT_FRAME:AddMessage("RaidTracker: " .. text);
+end
+
+function printTable(tbl)
+  for k, v in pairs(tbl) do
+    pPrint(k);
+  end
 end
