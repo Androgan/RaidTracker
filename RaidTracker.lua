@@ -3,6 +3,8 @@ local starttime = ""
 local raidZone = ""
 local numRaidMembers = 0
 
+local reset = false
+
 if(RaidAttendance == nil) then
   RaidAttendance = {};
 end
@@ -13,6 +15,8 @@ function RaidTracker_OnLoad()
   this:RegisterEvent("ZONE_CHANGED");
   
   this:RegisterEvent("RAID_ROSTER_UPDATE");
+  
+  this:RegisterEvent("PLAYER_LOGOUT");
 end
 
 function RaidTracker_OnEvent(event)
@@ -27,12 +31,18 @@ function RaidTracker_OnEvent(event)
       trackAttendance();
     end
   end
+  
+  if(event == "PLAYER_LOGOUT" and
+     reset) then
+    RaidAttendance = {}
+  end
 end
 
 -- ----------------------------------------------------------------------------
 
 function zoneChangeEventHandler()
-  if(raidZone ~= GetZoneText()) then
+  if(raidZone ~= GetZoneText() and
+     searchInTable(GetZoneText(), trackedZones)) then
     starttime = ""
     raidZone = ""
   end
