@@ -1,7 +1,11 @@
-local trackedZones = {"The Molten Core", "Blackwing Lair"}
+local trackedZones = {"The Molten Core", "Blackwing Lair", "Ironforge"}
 local starttime = ""
 local raidZone = ""
 local numRaidMembers = 0
+
+if(RaidAttendance == nil) then
+  RaidAttendance = {};
+end
 
 function RaidTracker_OnLoad()
   this:RegisterEvent("ZONE_CHANGED_NEW_AREA");
@@ -86,8 +90,14 @@ function pPrint(text)
   DEFAULT_CHAT_FRAME:AddMessage("RaidTracker: " .. text);
 end
 
-function printTable(tbl)
+function printTableKeys(tbl)
   for k, v in pairs(tbl) do
     pPrint(k);
+  end
+end
+
+function printTableVals(tbl)
+  for k, v in pairs(tbl) do
+    pPrint(v);
   end
 end
