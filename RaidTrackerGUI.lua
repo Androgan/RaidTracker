@@ -1,164 +1,65 @@
-local trackedZones = {"The Molten Core", "Blackwing Lair", "Ironforge", "City of Ironforge"}
-local starttime = ""
-local raidZone = ""
-local numRaidMembers = 0
+-- contains all functions for RaidTracker UI 
 
-local reset = false
 
-if(RaidAttendance == nil) then
-  RaidAttendance = {};
+
+
+
+function RaidTrackerUI_TestButton()
+	
+	pPrint("Test button")
+	--RaidTrackerUI_CreateFontstring("TestString 1", "-180", "100")
+	--RaidTrackerUI_CreateFontstring("TestString 2", "-180", "85")
+	
+	local offset = 0
+	for k, v in pairs(RaidAttendance) do
+		local line = v.date .. " - " .. v.zone
+		RaidTrackerUI_CreateFontstring( line, "-290", 100 - offset )
+		offset = offset + 15
+	end
+	--printTableVals(RaidAttendance)
 end
 
-function RaidTracker_OnLoad()
-  this:RegisterEvent("ZONE_CHANGED_NEW_AREA");
-  this:RegisterEvent("ZONE_CHANGED_INDOORS");
-  this:RegisterEvent("ZONE_CHANGED");
-  
-  this:RegisterEvent("RAID_ROSTER_UPDATE");
-  
-  this:RegisterEvent("PLAYER_LOGOUT");
-end
+function empty()
 
-function RaidTracker_OnEvent(event)
-  if(event == "ZONE_CHANGED_NEW_AREA" or
-     event == "ZONE_CHANGED_INDOORS" or
-     event == "ZONE_CHANGED") then
-    zoneChangeEventHandler();
-    -- mergeDuplicates();
-  end
-  
-  if(event == "RAID_ROSTER_UPDATE") then
-    if(playerLeaveOrEnter()) then
-      trackAttendance();
-    end
-  end
-  
-  if(event == "PLAYER_LOGOUT" and
-     reset) then
-    RaidAttendance = {}
-  elseif(event == "PLAYER_LOGOUT") then
-    pPrint("logging out event");
-    mergeDuplicates();
-  end
-end
-
--- ----------------------------------------------------------------------------
-
-function zoneChangeEventHandler()
-  if(raidZone ~= GetZoneText() and
-     searchInTable(GetZoneText(), trackedZones)) then
-    starttime = ""
-    raidZone = ""
-  end
-
-  trackAttendance();
-end
-
-function trackAttendance()
-  local raidMembers = {}
-  local name = ""
-  
-  if(checkTracking()) then
-    if(starttime == "") then
-      starttime = date();
-    end
-    
-    if(raidZone == "") then
-      raidZone = GetZoneText();
-    end
-    
-    numRaidMembers = GetNumRaidMembers();
-    for x = 1, numRaidMembers, 1 do
-      name = GetRaidRosterInfo(x);
-      raidMembers[name] = true
-    end
-    fillSaved(raidMembers);
-  end
-end
-
-function checkTracking()
-  local track = false
-  
-  track = searchInTable(GetZoneText(), trackedZones);
-  track = track and (GetNumRaidMembers() > 0);
-  
-  return track
-end
-
-function fillSaved(raidMembers)
-  local newRaid = {}
-  
-  newRaid["zone"] = raidZone;
-  newRaid["member"] = raidMembers;
-  newRaid["date"] = starttime;
-  
-  RaidAttendance[starttime] = newRaid;
-end
-
-function searchInTable(search, tbl)
-  for _, v in pairs(tbl) do
-    if(v == search) then
-      return true
-    end
-  end
-  return false
-end
-
-function playerLeaveOrEnter()
-  return numRaidMembers ~= GetNumRaidMembers()
-end
-
-function mergeDuplicates()
-  local datetime
-  local zone
-  local firstMembers = {}
-  local secondMembers = {}
-  local additionalMembers = {}
-  
-  pPrint("merging");
-  
-  for k, tbl in pairs(RaidAttendance) do
-    datetime = k
-    zone = tbl["zone"]
-    
-    pPrint(datetime);
-    
-    for kx, tblx in pairs(RaidAttendance) do
-      pPrint(kx);
-      if(isSameDay(datetime, kx) and
-         zone == tblx["zone"]) then
-        pPrint("is same");
-        firstMembers = tbl["member"]
-        secondMembers = tblx["member"]
-        for member, _ in pairs(secondMembers) do
-          if not(firstMembers[member]) then
-            firstMembers[member] = true
-          end
-        end
-        -- RaidAttendance[kx] = nil
-      end
-    end
-  end
-end
-
-function isSameDay(dateX, dateY)
-  return (string.sub(dateX, 1, 8) == string.sub(dateY, 1, 8))
-end
-
--- ----------------------------------------------------------------------------
-
-function pPrint(text)
-  DEFAULT_CHAT_FRAME:AddMessage("RaidTracker: " .. text);
-end
-
-function printTableKeys(tbl)
   for k, v in pairs(tbl) do
     pPrint(k);
   end
+  end
+  
+function RaidTrackerUI_CreateFontstring(text, x, y)
+	
+	local TemplateFrame = CreateFrame("Button",nil,RaidTrackerGUI)
+	TemplateFrame:SetPoint("LEFT",RaidTrackerGUI, "CENTER", x , y)
+	TemplateFrame:SetWidth(200)
+	TemplateFrame:SetHeight(15)
+	TemplateFrame:SetBackdrop({bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background"})
+	TemplateFrame:SetScript("OnClick",  function(self, button, down) RaidTrackerUI_SelectDate(self) end)
+		
+	local TemplateFontString = TemplateFrame:CreateFontString(nil, "OVERLAY")
+	TemplateFontString:SetPoint("LEFT", RaidTrackerGUI, "CENTER", x, y)
+	TemplateFontString:SetFont("Fonts\\FRIZQT__.TTF", 9)
+	TemplateFontString:SetWidth(200)
+	TemplateFontString:SetJustifyH("LEFT")
+	TemplateFontString:SetText(text) 
+
+
+ 
 end
 
-function printTableVals(tbl)
-  for k, v in pairs(tbl) do
-    pPrint(v);
-  end
+function RaidTrackerUI_SelectDate(frame)
+	--if frame:GetHeight() == nil then
+	--	pPrint("NIL")
+	--else
+	--	pPrint(frame:GetHeight())
+	--end
+pPrint("Buttons")
 end
+
+--	["01/06/18 17:54:54"] = {
+--		["zone"] = "Ironforge",
+--		["date"] = "01/06/18 17:54:54",
+--		["member"] = {
+--			["Earnil"] = true,
+--			["Androgan"] = true,
+--		},
+--	},
