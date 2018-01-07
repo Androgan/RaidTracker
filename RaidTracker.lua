@@ -107,21 +107,21 @@ function playerLeaveOrEnter()
 end
 
 function mergeDuplicates()
-  local datetime
-  local zone
+  local datetime = ""
+  local zone = ""
   local firstMembers = {}
   local secondMembers = {}
   local additionalMembers = {}
   
   for k, tbl in pairs(RaidAttendance) do
-    datetime = tbl["date"]
     zone = tbl["zone"]
+    datetime = findOldestRaidOfDay(k, zone)
     
     for kx, tblx in pairs(RaidAttendance) do
       if(isSameDay(datetime, kx) and
          zone == tblx["zone"] and
          not isSameTime(datetime, kx)) then
-        firstMembers = tbl["member"]
+        firstMembers = RaidAttendance[datetime].member
         secondMembers = tblx["member"]
         for member, _ in pairs(secondMembers) do
           if not(firstMembers[member]) then
@@ -134,12 +134,56 @@ function mergeDuplicates()
   end
 end
 
+function findOldestRaidOfDay(datetime, zone)
+  local oldest = datetime
+
+  for k, tbl in pairs(RaidAttendance) do
+    if(isSameDay(oldest, k) and
+       zone == tbl["zone"] and
+       not isSameTime(oldest, k)) then
+      if(isOlder(k, oldest)) then
+        oldest = k
+      end 
+    end
+  end
+  
+  return oldest
+end
+
 function isSameDay(dateX, dateY)
   return (string.sub(dateX, 1, 8) == string.sub(dateY, 1, 8))
 end
 
 function isSameTime(dateX, dateY)
   return (dateX == dateY)
+end
+
+function isOlder(k, oldest)
+  local hour = ""
+  local minute = ""
+  local second = ""
+  
+  local ohour = ""
+  local ominute = ""
+  local osecond = ""
+  
+  hour = string.sub(k, 10, 11);
+  minute = string.sub(k, 13, 14);
+  second = string.sub(k, 16, 17);
+  
+  ohour = string.sub(oldest, 10, 11);
+  ominute = string.sub(oldest, 13, 14);
+  osecond = string.sub(oldest, 16, 17);
+  
+  if(hour < ohour) then
+    return true
+  elseif(minute < ominute) then
+    return true
+  elseif(second < osecond) then
+    return true
+  else
+    return false
+  end
 end
 
 -- ----------------------------------------------------------------------------
