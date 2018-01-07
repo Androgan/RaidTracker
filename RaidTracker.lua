@@ -7,17 +7,17 @@
 -- ----------------------------------------------------------------------------
 
 -- {"Ironforge", "City of Ironforge"}
-local trackedZones = {"The Molten Core",
-                      "Onyxia's Lair",
-                      "Blackwing Lair",
-                      "Zul'Gurub",
-                      "Ruins of Ahn'Qiraj",
-                      "The Temple of Ahn'Qiraj",
-                      "Naxxramas"}
-local starttime = ""
-local raidZone = ""
-local numRaidMembers = 0
-local reset = false
+trackedZones = {"The Molten Core",
+                "Onyxia's Lair",
+                "Blackwing Lair",
+                "Zul'Gurub",
+                "Ruins of Ahn'Qiraj",
+                "The Temple of Ahn'Qiraj",
+                "Naxxramas"}
+starttime = ""
+raidZone = ""
+numRaidMembers = 0
+deleteRecords = false
 
 -- ----------------------------------------------------------------------------
 -- Initializing Saved Variables
@@ -70,7 +70,7 @@ function rosterUpdateHandler()
 end
 
 function logoutHandler()
-  if(reset) then
+  if(deleteRecords) then
     RaidAttendance = {}
   else
     mergeDuplicates();
@@ -117,6 +117,22 @@ function isOlder(k, oldest)
   end
 end
 
+function findOldestRaidOfDay(datetime, zone)
+  local oldest = datetime
+
+  for k, tbl in pairs(RaidAttendance) do
+    if(isSameDay(oldest, k) and
+       zone == tbl["zone"] and
+       not isSameTime(oldest, k)) then
+      if(isOlder(k, oldest)) then
+        oldest = k
+      end 
+    end
+  end
+  
+  return oldest
+end
+
 -- ----------------------------------------------------------------------------
 -- Slash Commands
 -- ----------------------------------------------------------------------------
@@ -134,9 +150,18 @@ function RaidTracker_Command(msg)
 
   if(cmd == "gui") then
     RaidTrackerUI_ToggleRaidTrackerWindow();
+  elseif(cmd == "reset") then
+    if not(deleteRecords) then
+      deleteRecords = true
+      pPrint("Deleting all records on next logout.");
+    else
+      deleteRecords = false
+      pPrint("No longer deleting records on next logout.");
+    end
   else
     pPrint("Version " .. getVersion() .. " Usage:");
     pPrint("/rt gui - Opens up the RaidTracker Window.");
+    pPrint("/rt reset - Set flag to delete records on logout.");
   end
 end
 

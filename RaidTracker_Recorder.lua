@@ -24,15 +24,6 @@ function trackAttendance()
   end
 end
 
-function checkTracking()
-  local track = false
-  
-  track = searchInTable(GetZoneText(), trackedZones);
-  track = track and (GetNumRaidMembers() > 0);
-  
-  return track
-end
-
 function fillSaved(raidMembers)
   local newRaid = {}
   
@@ -41,19 +32,6 @@ function fillSaved(raidMembers)
   newRaid["date"] = starttime;
   
   RaidAttendance[starttime] = newRaid;
-end
-
-function searchInTable(search, tbl)
-  for _, v in pairs(tbl) do
-    if(v == search) then
-      return true
-    end
-  end
-  return false
-end
-
-function playerLeaveOrEnter()
-  return numRaidMembers ~= GetNumRaidMembers()
 end
 
 function mergeDuplicates()
@@ -84,18 +62,28 @@ function mergeDuplicates()
   end
 end
 
-function findOldestRaidOfDay(datetime, zone)
-  local oldest = datetime
+-- ----------------------------------------------------------------------------
+-- Helpers
+-- ----------------------------------------------------------------------------
 
-  for k, tbl in pairs(RaidAttendance) do
-    if(isSameDay(oldest, k) and
-       zone == tbl["zone"] and
-       not isSameTime(oldest, k)) then
-      if(isOlder(k, oldest)) then
-        oldest = k
-      end 
+function checkTracking()
+  local track = false
+  
+  track = searchInTable(GetZoneText(), trackedZones);
+  track = track and (GetNumRaidMembers() > 0);
+  
+  return track
+end
+
+function searchInTable(search, tbl)
+  for _, v in pairs(tbl) do
+    if(v == search) then
+      return true
     end
   end
-  
-  return oldest
+  return false
+end
+
+function playerLeaveOrEnter()
+  return numRaidMembers ~= GetNumRaidMembers()
 end
