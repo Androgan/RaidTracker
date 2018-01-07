@@ -6,15 +6,6 @@ function RaidTrackerUI_TestButton()
   pPrint("Test button")
 end
 
-function RaidTrackerUI_CreateWindowRaidlist()
-  local offset = 0
-  for k, v in pairs(RaidAttendance) do
-    local line = v.date .. " - " .. v.zone
-    RaidTrackerUI_CreateFontstring(line, "-290", 100 - offset)
-    offset = offset + 15
-  end
-end
-
 -- update raid participants
 function RaidTrackerUI_SelectDate()
   local raidDate = ""
@@ -44,8 +35,17 @@ function RaidTrackerUI_SelectDate()
 end
 
 -- ----------------------------------------------------------------------------
--- UI Elements
+-- UI Element Creation
 -- ----------------------------------------------------------------------------
+
+function RaidTrackerUI_CreateWindowRaidlist()
+  local offset = 0
+  for k, v in pairs(RaidAttendance) do
+    local line = v.date .. " - " .. v.zone
+    RaidTrackerUI_CreateFontstring(line, "-290", 100 - offset)
+    offset = offset + 15
+  end
+end
 
 function RaidTrackerUI_CreateRaidMemberListFrame()
   RaidMemberListFrame = CreateFrame("Frame","RaidMemberListFrame",RaidTrackerGUI, RaidTrackerGUI)
@@ -79,11 +79,10 @@ function RaidTrackerUI_CreateFontstring(text, x, y)
   TemplateFrame:SetFontString(TemplateFontString)
 end
 
---  ["01/06/18 17:54:54"] = {
---    ["zone"] = "Ironforge",
---    ["date"] = "01/06/18 17:54:54",
---    ["member"] = {
---      ["Earnil"] = true,
---      ["Androgan"] = true,
---    },
---  },
+function RaidTrackerUI_ToggleRaidTrackerWindow()
+  if RaidTrackerGUI:IsVisible() then
+    RaidTrackerGUI:Hide();
+  else
+    RaidTrackerGUI:Show();
+  end
+end

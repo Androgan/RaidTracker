@@ -1,8 +1,19 @@
 -- ----------------------------------------------------------------------------
+-- Main File
+--
+-- Contains Utility Functions and Globals
+-- ----------------------------------------------------------------------------
 -- Globals
 -- ----------------------------------------------------------------------------
 
-local trackedZones = {"The Molten Core", "Onyxia's Lair", "Blackwing Lair", "Zul'Gurub", "Ruins of Ahn'Qiraj", "The Temple of Ahn'Qiraj", "Naxxramas"}        --{"The Molten Core", "Blackwing Lair", "Ironforge", "City of Ironforge"}
+-- {"Ironforge", "City of Ironforge"}
+local trackedZones = {"The Molten Core",
+                      "Onyxia's Lair",
+                      "Blackwing Lair",
+                      "Zul'Gurub",
+                      "Ruins of Ahn'Qiraj",
+                      "The Temple of Ahn'Qiraj",
+                      "Naxxramas"}
 local starttime = ""
 local raidZone = ""
 local numRaidMembers = 0
@@ -21,16 +32,8 @@ end
 -- ----------------------------------------------------------------------------
 
 function RaidTracker_OnLoad()
-  this:RegisterEvent("ZONE_CHANGED_NEW_AREA");
-  this:RegisterEvent("ZONE_CHANGED_INDOORS");
-  this:RegisterEvent("ZONE_CHANGED");
-  
-  this:RegisterEvent("RAID_ROSTER_UPDATE");
-  
-  this:RegisterEvent("PLAYER_LOGOUT");
-  
-  SlashCmdList["RAIDTRACKER"] = RaidTracker_Command;
-  SLASH_RAIDTRACKER1 = "/rt"
+  registerEvents();
+  registerSlashCommands();
   
   pPrint("Version " .. getVersion() .. " loaded.");
 end
@@ -43,16 +46,11 @@ function RaidTracker_OnEvent(event)
   end
   
   if(event == "RAID_ROSTER_UPDATE") then
-    if(playerLeaveOrEnter()) then
-      trackAttendance();
-    end
+    rosterUpdateHandler();
   end
   
-  if(event == "PLAYER_LOGOUT" and
-     reset) then
-    RaidAttendance = {}
-  elseif(event == "PLAYER_LOGOUT") then
-    mergeDuplicates();
+  if(event == "PLAYER_LOGOUT") then
+    logoutHandler();
   end
 end
 
@@ -65,106 +63,18 @@ function zoneChangeEventHandler()
   trackAttendance();
 end
 
--- ----------------------------------------------------------------------------
--- Tracking Functionality
--- ----------------------------------------------------------------------------
-
-function trackAttendance()
-  local raidMembers = {}
-  local name = ""
-  
-  if(checkTracking()) then
-    if(starttime == "") then
-      starttime = date();
-    end
-    
-    if(raidZone == "") then
-      raidZone = GetZoneText();
-    end
-    
-    numRaidMembers = GetNumRaidMembers();
-    for x = 1, numRaidMembers, 1 do
-      name = GetRaidRosterInfo(x);
-      raidMembers[name] = true
-    end
-    fillSaved(raidMembers);
+function rosterUpdateHandler()
+  if(playerLeaveOrEnter()) then
+    trackAttendance();
   end
 end
 
-function checkTracking()
-  local track = false
-  
-  track = searchInTable(GetZoneText(), trackedZones);
-  track = track and (GetNumRaidMembers() > 0);
-  
-  return track
-end
-
-function fillSaved(raidMembers)
-  local newRaid = {}
-  
-  newRaid["zone"] = raidZone;
-  newRaid["member"] = raidMembers;
-  newRaid["date"] = starttime;
-  
-  RaidAttendance[starttime] = newRaid;
-end
-
-function searchInTable(search, tbl)
-  for _, v in pairs(tbl) do
-    if(v == search) then
-      return true
-    end
+function logoutHandler()
+  if(reset) then
+    RaidAttendance = {}
+  else
+    mergeDuplicates();
   end
-  return false
-end
-
-function playerLeaveOrEnter()
-  return numRaidMembers ~= GetNumRaidMembers()
-end
-
-function mergeDuplicates()
-  local datetime = ""
-  local zone = ""
-  local firstMembers = {}
-  local secondMembers = {}
-  local additionalMembers = {}
-  
-  for k, tbl in pairs(RaidAttendance) do
-    zone = tbl["zone"]
-    datetime = findOldestRaidOfDay(k, zone);
-    
-    for kx, tblx in pairs(RaidAttendance) do
-      if(isSameDay(datetime, kx) and
-         zone == tblx["zone"] and
-         not isSameTime(datetime, kx)) then
-        firstMembers = RaidAttendance[datetime].member
-        secondMembers = tblx["member"]
-        for member, _ in pairs(secondMembers) do
-          if not(firstMembers[member]) then
-            firstMembers[member] = true
-          end
-        end
-        RaidAttendance[kx] = nil
-      end
-    end
-  end
-end
-
-function findOldestRaidOfDay(datetime, zone)
-  local oldest = datetime
-
-  for k, tbl in pairs(RaidAttendance) do
-    if(isSameDay(oldest, k) and
-       zone == tbl["zone"] and
-       not isSameTime(oldest, k)) then
-      if(isOlder(k, oldest)) then
-        oldest = k
-      end 
-    end
-  end
-  
-  return oldest
 end
 
 -- ----------------------------------------------------------------------------
@@ -208,8 +118,39 @@ function isOlder(k, oldest)
 end
 
 -- ----------------------------------------------------------------------------
+-- Slash Commands
+-- ----------------------------------------------------------------------------
+
+function registerSlashCommands()
+  SlashCmdList["RAIDTRACKER"] = RaidTracker_Command;
+  SLASH_RAIDTRACKER1 = "/rt"
+  SLASH_RAIDTRACKER2 = "/raidtracker"
+end
+
+function RaidTracker_Command(msg)
+  local cmd = ""
+  
+  cmd = string.lower(msg)
+
+  if(cmd == "gui") then
+    RaidTrackerUI_ToggleRaidTrackerWindow();
+  else
+    pPrint("Version " .. getVersion() .. " Usage:");
+    pPrint("/rt gui - Opens up the RaidTracker Window.");
+  end
+end
+
+-- ----------------------------------------------------------------------------
 -- Utility Functions
 -- ----------------------------------------------------------------------------
+
+function registerEvents()
+  this:RegisterEvent("ZONE_CHANGED_NEW_AREA");
+  this:RegisterEvent("ZONE_CHANGED_INDOORS");
+  this:RegisterEvent("ZONE_CHANGED");
+  this:RegisterEvent("RAID_ROSTER_UPDATE");
+  this:RegisterEvent("PLAYER_LOGOUT");
+end
 
 function pPrint(text)
   DEFAULT_CHAT_FRAME:AddMessage("RaidTracker: " .. text);
@@ -224,27 +165,6 @@ end
 function printTableVals(tbl)
   for k, v in pairs(tbl) do
     pPrint(v);
-  end
-end
-
-function RaidTracker_Command(msg)
-  local cmd = ""
-  
-  cmd = string.lower(msg)
-
-  if(cmd == "gui") then
-    RaidTracker_ToggleRaidTrackerWindow();
-  else
-    pPrint("Version " .. getVersion() .. " Usage:");
-    pPrint("/rt gui - Opens up the RaidTracker Window.");
-  end
-end
-
-function RaidTracker_ToggleRaidTrackerWindow()
-  if RaidTrackerGUI:IsVisible() then
-    RaidTrackerGUI:Hide();
-  else
-    RaidTrackerGUI:Show();
   end
 end
 
