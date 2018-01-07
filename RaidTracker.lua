@@ -1,29 +1,38 @@
-local raidTrackerVersion = "0.0.1"
+-- ----------------------------------------------------------------------------
+-- Globals
+-- ----------------------------------------------------------------------------
 
 local trackedZones = {"The Molten Core", "Onyxia's Lair", "Blackwing Lair", "Zul'Gurub", "Ruins of Ahn'Qiraj", "The Temple of Ahn'Qiraj", "Naxxramas"}        --{"The Molten Core", "Blackwing Lair", "Ironforge", "City of Ironforge"}
 local starttime = ""
 local raidZone = ""
 local numRaidMembers = 0
-
 local reset = false
 
+-- ----------------------------------------------------------------------------
+-- Initializing Saved Variables
+-- ----------------------------------------------------------------------------
 
 if(RaidAttendance == nil) then
   RaidAttendance = {};
 end
 
+-- ----------------------------------------------------------------------------
+-- Event Handling
+-- ----------------------------------------------------------------------------
+
 function RaidTracker_OnLoad()
-	this:RegisterEvent("ZONE_CHANGED_NEW_AREA");
-	this:RegisterEvent("ZONE_CHANGED_INDOORS");
-	this:RegisterEvent("ZONE_CHANGED");
-	
-	this:RegisterEvent("RAID_ROSTER_UPDATE");
-	
-	this:RegisterEvent("PLAYER_LOGOUT");
-	
-	--register / comands
-	SlashCmdList["RAIDTRACKER"] = RaidTracker_Command;
-	SLASH_RAIDTRACKER1 = "/rt"
+  this:RegisterEvent("ZONE_CHANGED_NEW_AREA");
+  this:RegisterEvent("ZONE_CHANGED_INDOORS");
+  this:RegisterEvent("ZONE_CHANGED");
+  
+  this:RegisterEvent("RAID_ROSTER_UPDATE");
+  
+  this:RegisterEvent("PLAYER_LOGOUT");
+  
+  SlashCmdList["RAIDTRACKER"] = RaidTracker_Command;
+  SLASH_RAIDTRACKER1 = "/rt"
+  
+  pPrint("Version " .. getVersion() .. " loaded.");
 end
 
 function RaidTracker_OnEvent(event)
@@ -47,17 +56,18 @@ function RaidTracker_OnEvent(event)
   end
 end
 
--- ----------------------------------------------------------------------------
-
 function zoneChangeEventHandler()
   if(raidZone ~= GetZoneText() and
      searchInTable(GetZoneText(), trackedZones)) then
     starttime = ""
     raidZone = ""
   end
-
   trackAttendance();
 end
+
+-- ----------------------------------------------------------------------------
+-- Tracking Functionality
+-- ----------------------------------------------------------------------------
 
 function trackAttendance()
   local raidMembers = {}
@@ -122,7 +132,7 @@ function mergeDuplicates()
   
   for k, tbl in pairs(RaidAttendance) do
     zone = tbl["zone"]
-    datetime = findOldestRaidOfDay(k, zone)
+    datetime = findOldestRaidOfDay(k, zone);
     
     for kx, tblx in pairs(RaidAttendance) do
       if(isSameDay(datetime, kx) and
@@ -156,6 +166,10 @@ function findOldestRaidOfDay(datetime, zone)
   
   return oldest
 end
+
+-- ----------------------------------------------------------------------------
+-- Time Functions
+-- ----------------------------------------------------------------------------
 
 function isSameDay(dateX, dateY)
   return (string.sub(dateX, 1, 8) == string.sub(dateY, 1, 8))
@@ -193,9 +207,8 @@ function isOlder(k, oldest)
   end
 end
 
-function RaidTracker_ToggleRaidTrackerWindow()
-	if RaidTrackerGUI:IsVisible() then RaidTrackerGUI:Hide() else RaidTrackerGUI:Show() end
-end
+-- ----------------------------------------------------------------------------
+-- Utility Functions
 -- ----------------------------------------------------------------------------
 
 function pPrint(text)
@@ -215,17 +228,26 @@ function printTableVals(tbl)
 end
 
 function RaidTracker_Command(msg)
+  local cmd = ""
+  
+  cmd = string.lower(msg)
 
-    local cmd = string.lower(msg)
-
-    if cmd == "gui" then
-        RaidTracker_ToggleRaidTrackerWindow();
-        return;
-    end
-
-
-    -- Print usage information
-    pPrint("RaidTracker VErsion: " .. raidTrackerVersion .. " Usage:");
+  if(cmd == "gui") then
+    RaidTracker_ToggleRaidTrackerWindow();
+  else
+    pPrint("Version " .. getVersion() .. " Usage:");
     pPrint("/rt gui - Opens up the RaidTracker Window.");
+  end
+end
 
+function RaidTracker_ToggleRaidTrackerWindow()
+  if RaidTrackerGUI:IsVisible() then
+    RaidTrackerGUI:Hide();
+  else
+    RaidTrackerGUI:Show();
+  end
+end
+
+function getVersion()
+  return GetAddOnMetadata("RaidTracker", "Version")
 end
