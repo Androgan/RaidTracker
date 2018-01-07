@@ -1,31 +1,60 @@
 -- contains all functions for RaidTracker UI 
 
-
-
-
-
 function RaidTrackerUI_TestButton()
-	
 	pPrint("Test button")
-	--RaidTrackerUI_CreateFontstring("TestString 1", "-180", "100")
-	--RaidTrackerUI_CreateFontstring("TestString 2", "-180", "85")
-	
+
+end
+
+
+function RaidTrackerUI_CreateWindowRaidlist()	
 	local offset = 0
 	for k, v in pairs(RaidAttendance) do
 		local line = v.date .. " - " .. v.zone
 		RaidTrackerUI_CreateFontstring( line, "-290", 100 - offset )
 		offset = offset + 15
 	end
-	--printTableVals(RaidAttendance)
 end
 
-function empty()
+ 
+ 
+-- update raid participants
+function RaidTrackerUI_SelectDate()
+	local raidDate = string.sub(this:GetText(),0, 17)
+	local raidMember = 1
+	pPrint(raidDate)
+	pPrint(RaidAttendance[raidDate].zone)
+	
+	for k, v in pairs(RaidAttendance[raidDate].member) do
+		if TemplateRaidMemberFontString[raidMember] == nil then
+			TemplateRaidMemberFontString[raidMember] = RaidMemberListFrame:CreateFontString(nil, "OVERLAY")
+			TemplateRaidMemberFontString[raidMember]:SetPoint("LEFT", RaidTrackerGUI, "CENTER", -40, (60 + 15 * raidMember))
+			TemplateRaidMemberFontString[raidMember]:SetFont("Fonts\\FRIZQT__.TTF", 9)
+			TemplateRaidMemberFontString[raidMember]:SetWidth(200)
+			TemplateRaidMemberFontString[raidMember]:SetJustifyH("LEFT")
+			TemplateRaidMemberFontString[raidMember]:SetText(k)
+		else
+			TemplateRaidMemberFontString[raidMember]:SetText(k)
+		end
+		raidMember = raidMember + 1
+	end
+end 
+ 
+-- construct elements UI
 
-  for k, v in pairs(tbl) do
-    pPrint(k);
-  end
-  end
-  
+function RaidTrackerUI_CreateRaidMemberListFrame()
+	
+	RaidMemberListFrame = CreateFrame("Frame",RaidMemberListFrame,RaidTrackerGUI)
+	RaidMemberListFrame:SetPoint("TOPLEFT",RaidTrackerGUI, "CENTER", -40 , 110)
+	RaidMemberListFrame:SetWidth(250)
+	RaidMemberListFrame:SetHeight(300)
+	RaidMemberListFrame:SetBackdrop({bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background"})
+	TemplateRaidMemberFontString = {}
+	
+	
+	
+end
+
+
 function RaidTrackerUI_CreateFontstring(text, x, y)
 	
 	local DummyFrame = CreateFrame("Frame",nil,RaidTrackerGUI)
@@ -52,9 +81,6 @@ function RaidTrackerUI_CreateFontstring(text, x, y)
  
 end
 
-function RaidTrackerUI_SelectDate()
-	pPrint(this:GetText())
-end
 
 --	["01/06/18 17:54:54"] = {
 --		["zone"] = "Ironforge",

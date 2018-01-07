@@ -51,6 +51,24 @@
                     </OnClick>
 				</Scripts>
 			</Button>
+		    <!-- Load Button -->
+			<Button name="RaidTrackerLoadButton" inherits="UIPanelButtonTemplate" text="Load">
+				<Size><AbsDimension x="60" y="15"/></Size>
+				<Anchors>
+					<Anchor point="CENTER" relativePoint="CENTER">
+						<Offset>
+							<AbsDimension x="-260" y="120"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+				    <OnClick>
+						RaidTrackerUI_CreateWindowRaidlist();
+						RaidTrackerUI_CreateRaidMemberListFrame();
+						this:Hide();
+                    </OnClick>
+				</Scripts>
+			</Button>
             <Layer level="ARTWORK">
                 <FontString name="RaidTrackerTextString" outline="NORMAL" inherits="GameFontNormal" text="" hidden="false">
                     <Anchors><Anchor point="CENTER" relativePoint="CENTER"><Offset><AbsDimension x="0" y="0"/></Offset></Anchor></Anchors> 
