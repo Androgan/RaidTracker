@@ -1,6 +1,6 @@
 local raidTrackerVersion = "0.0.1"
 
-local trackedZones = {"The Molten Core", "Blackwing Lair", "Ironforge", "City of Ironforge"}
+local trackedZones = {"The Molten Core", "Onyxia's Lair", "Blackwing Lair", "Zul'Gurub", "Ruins of Ahn'Qiraj", "The Temple of Ahn'Qiraj", "Naxxramas"}        --{"The Molten Core", "Blackwing Lair", "Ironforge", "City of Ironforge"}
 local starttime = ""
 local raidZone = ""
 local numRaidMembers = 0
