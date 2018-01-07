@@ -1,3 +1,5 @@
+local raidTrackerVersion = "0.0.1"
+
 local trackedZones = {"The Molten Core", "Blackwing Lair", "Ironforge", "City of Ironforge"}
 local starttime = ""
 local raidZone = ""
@@ -5,18 +7,23 @@ local numRaidMembers = 0
 
 local reset = false
 
+
 if(RaidAttendance == nil) then
   RaidAttendance = {};
 end
 
 function RaidTracker_OnLoad()
-  this:RegisterEvent("ZONE_CHANGED_NEW_AREA");
-  this:RegisterEvent("ZONE_CHANGED_INDOORS");
-  this:RegisterEvent("ZONE_CHANGED");
-  
-  this:RegisterEvent("RAID_ROSTER_UPDATE");
-  
-  this:RegisterEvent("PLAYER_LOGOUT");
+	this:RegisterEvent("ZONE_CHANGED_NEW_AREA");
+	this:RegisterEvent("ZONE_CHANGED_INDOORS");
+	this:RegisterEvent("ZONE_CHANGED");
+	
+	this:RegisterEvent("RAID_ROSTER_UPDATE");
+	
+	this:RegisterEvent("PLAYER_LOGOUT");
+	
+	--register / comands
+	SlashCmdList["RAIDTRACKER"] = RaidTracker_Command;
+	SLASH_RAIDTRACKER1 = "/rt"
 end
 
 function RaidTracker_OnEvent(event)
@@ -186,6 +193,9 @@ function isOlder(k, oldest)
   end
 end
 
+function RaidTracker_ToggleRaidTrackerWindow()
+	if RaidTrackerGUI:IsVisible() then RaidTrackerGUI:Hide() else RaidTrackerGUI:Show() end
+end
 -- ----------------------------------------------------------------------------
 
 function pPrint(text)
@@ -202,4 +212,20 @@ function printTableVals(tbl)
   for k, v in pairs(tbl) do
     pPrint(v);
   end
+end
+
+function RaidTracker_Command(msg)
+
+    local cmd = string.lower(msg)
+
+    if cmd == "gui" then
+        RaidTracker_ToggleRaidTrackerWindow();
+        return;
+    end
+
+
+    -- Print usage information
+    pPrint("RaidTracker VErsion: " .. raidTrackerVersion .. " Usage:");
+    pPrint("/rt gui - Opens up the RaidTracker Window.");
+
 end

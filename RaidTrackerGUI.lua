@@ -37,7 +37,7 @@ function RaidTrackerUI_SelectDate()
 		raidMember = raidMember + 1
 	end
 	local fontStringListLength = RaidMemberListFrame:GetNumRegions()
-	for i = raidMember, fontStringListLength , 1 do
+	for i = raidMember, fontStringListLength - 1, 1 do
 		TemplateRaidMemberFontString[i]:SetText("")
 	end
 	
@@ -52,7 +52,7 @@ function RaidTrackerUI_CreateRaidMemberListFrame()
 	RaidMemberListFrame:SetPoint("TOPLEFT",RaidTrackerGUI, "CENTER", -40 , 110)
 	RaidMemberListFrame:SetWidth(250)
 	RaidMemberListFrame:SetHeight(300)
-	--RaidMemberListFrame:SetBackdrop({bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background"})
+	RaidMemberListFrame:SetBackdrop({bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background"})
 	TemplateRaidMemberFontString = {}
 	
 	

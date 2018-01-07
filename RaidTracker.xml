@@ -15,7 +15,7 @@
 	</Frame>
 	
 	<!-- RaidTracker GUI Frame -->
-    <Frame name="RaidTrackerGUI" frameStrata="DIALOG" parent="UIParent" hidden="false" movable="true" enableMouse="true">
+    <Frame name="RaidTrackerGUI" frameStrata="DIALOG" parent="UIParent" hidden="true" movable="true" enableMouse="true">
         <Size><AbsDimension x="600" y="270"/></Size>
         <Anchors> <Anchor point="CENTER" /></Anchors>
         <Scripts>            
