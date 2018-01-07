@@ -21,13 +21,12 @@ end
 function RaidTrackerUI_SelectDate()
 	local raidDate = string.sub(this:GetText(),0, 17)
 	local raidMember = 1
-	pPrint(raidDate)
-	pPrint(RaidAttendance[raidDate].zone)
+
 	
 	for k, v in pairs(RaidAttendance[raidDate].member) do
 		if TemplateRaidMemberFontString[raidMember] == nil then
 			TemplateRaidMemberFontString[raidMember] = RaidMemberListFrame:CreateFontString(nil, "OVERLAY")
-			TemplateRaidMemberFontString[raidMember]:SetPoint("LEFT", RaidTrackerGUI, "CENTER", -40, (60 + 15 * raidMember))
+			TemplateRaidMemberFontString[raidMember]:SetPoint("LEFT", RaidTrackerGUI, "CENTER", -40, (110 - 15 * raidMember))
 			TemplateRaidMemberFontString[raidMember]:SetFont("Fonts\\FRIZQT__.TTF", 9)
 			TemplateRaidMemberFontString[raidMember]:SetWidth(200)
 			TemplateRaidMemberFontString[raidMember]:SetJustifyH("LEFT")
@@ -37,17 +36,23 @@ function RaidTrackerUI_SelectDate()
 		end
 		raidMember = raidMember + 1
 	end
+	local fontStringListLength = RaidMemberListFrame:GetNumRegions()
+	for i = raidMember, fontStringListLength , 1 do
+		TemplateRaidMemberFontString[i]:SetText("")
+	end
+	
+	
 end 
  
 -- construct elements UI
 
 function RaidTrackerUI_CreateRaidMemberListFrame()
 	
-	RaidMemberListFrame = CreateFrame("Frame",RaidMemberListFrame,RaidTrackerGUI)
+	RaidMemberListFrame = CreateFrame("Frame","RaidMemberListFrame",RaidTrackerGUI, RaidTrackerGUI)
 	RaidMemberListFrame:SetPoint("TOPLEFT",RaidTrackerGUI, "CENTER", -40 , 110)
 	RaidMemberListFrame:SetWidth(250)
 	RaidMemberListFrame:SetHeight(300)
-	RaidMemberListFrame:SetBackdrop({bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background"})
+	--RaidMemberListFrame:SetBackdrop({bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background"})
 	TemplateRaidMemberFontString = {}
 	
 	
