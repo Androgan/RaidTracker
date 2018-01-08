@@ -6,7 +6,7 @@
 -- Globals
 -- ----------------------------------------------------------------------------
 
--- {"Ironforge", "City of Ironforge"}
+-- trackedZones = {"Ironforge", "City of Ironforge"}
 trackedZones = {"The Molten Core",
                 "Onyxia's Lair",
                 "Blackwing Lair",

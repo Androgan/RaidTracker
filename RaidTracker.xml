@@ -78,8 +78,8 @@
     </Frames>
   </Frame>
   
-  <!-- RaidTracker Possition probe Frame -->
-  <Frame name="RaidTrackerPossitionProbe" frameStrata="DIALOG" toplevel="true" parent="RaidTrackerGUI" hidden="false" movable="true" enableMouse="true">
+  <!-- RaidTracker Position probe Frame -->
+  <Frame name="RaidTrackerPositionProbe" frameStrata="DIALOG" toplevel="true" parent="RaidTrackerGUI" hidden="false" movable="true" enableMouse="true">
     <Size><AbsDimension x="80" y="20"/></Size>
     <Anchors> <Anchor point="CENTER" /></Anchors>
     <Scripts>
@@ -91,13 +91,7 @@
       </OnDragStart>
       <OnDragStop>
         this:StopMovingOrSizing();
-        x,y = RaidTrackerPossitionProbe:GetCenter()
-        v,w = RaidTrackerGUI:GetCenter()
-        x = x - v
-        y = y - w
-        x = math.floor(x)
-        y = math.floor(y)
-        RaidTrackerPossitionProbeString:SetText(x .. " | " ..  y)
+        RaidTrackerUI_UpdateRelativePosition(this, this:GetParent(), "RaidTrackerPositionProbeString");
       </OnDragStop>
     </Scripts>
     <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
@@ -107,7 +101,7 @@
     </Backdrop>
     <Layers>
       <Layer level="ARTWORK">
-        <FontString name="RaidTrackerPossitionProbeString" outline="NORMAL" inherits="GameFontNormal" text=":)" hidden="false">
+        <FontString name="RaidTrackerPositionProbeString" outline="NORMAL" inherits="GameFontNormal" text=":)" hidden="false">
           <Anchors><Anchor point="CENTER" relativePoint="TOP"><Offset><AbsDimension x="0" y="-10"/></Offset></Anchor></Anchors>
         </FontString>
       </Layer>

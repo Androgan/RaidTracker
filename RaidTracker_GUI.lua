@@ -2,10 +2,6 @@
 -- RaidTracker GUI for viewing recorded Raids
 -- ----------------------------------------------------------------------------
 
-function RaidTrackerUI_TestButton()
-  pPrint("Test button")
-end
-
 -- update raid participants
 function RaidTrackerUI_SelectDate()
   local raidDate = ""
@@ -79,10 +75,33 @@ function RaidTrackerUI_CreateFontstring(text, x, y)
   TemplateFrame:SetFontString(TemplateFontString)
 end
 
+-- ----------------------------------------------------------------------------
+-- Helper
+-- ----------------------------------------------------------------------------
+
+function RaidTrackerUI_TestButton()
+  pPrint("Test button")
+end
+
 function RaidTrackerUI_ToggleRaidTrackerWindow()
   if RaidTrackerGUI:IsVisible() then
     RaidTrackerGUI:Hide();
   else
     RaidTrackerGUI:Show();
   end
+end
+
+function RaidTrackerUI_UpdateRelativePosition(obj, parent, strName)
+  local x = 0
+  local y = 0
+  local a = 0
+  local b = 0
+  
+  x, y = obj:GetCenter()
+  a, b = parent:GetCenter()
+  x = x - a
+  y = y - b
+  x = math.floor(x)
+  y = math.floor(y)
+  getglobal(strName):SetText(x .. " | " ..  y)
 end
