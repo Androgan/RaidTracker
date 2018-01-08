@@ -16,12 +16,14 @@
   </Frame>
   
   <!-- RaidTracker GUI Frame -->
-  <Frame name="RaidTrackerGUI" frameStrata="DIALOG" parent="UIParent" hidden="true" movable="true" enableMouse="true">
+  <Frame name="RaidTrackerGUI" frameStrata="DIALOG" parent="UIParent" hidden="false" movable="true" enableMouse="true">
     <Size><AbsDimension x="600" y="270"/></Size>
     <Anchors> <Anchor point="CENTER" /></Anchors>
     <Scripts>
       <OnLoad>
         this:RegisterForDrag("LeftButton");
+        RaidTrackerUI_CreateRaidMemberListFrame();
+        RaidTrackerUI_UpdateRaidlist();
       </OnLoad>
       <OnDragStart>
         this:StartMoving();
@@ -47,26 +49,11 @@
           </Anchor>
         </Anchors>
         <Scripts>
+          <OnLoad>
+
+          </OnLoad>
           <OnClick>
             RaidTrackerUI_TestButton()
-          </OnClick>
-        </Scripts>
-      </Button>
-      <!-- Load Button -->
-      <Button name="RaidTrackerLoadButton" inherits="UIPanelButtonTemplate" text="Load">
-        <Size><AbsDimension x="60" y="15"/></Size>
-        <Anchors>
-          <Anchor point="CENTER" relativePoint="CENTER">
-            <Offset>
-              <AbsDimension x="-260" y="120"/>
-            </Offset>
-          </Anchor>
-        </Anchors>
-        <Scripts>
-          <OnClick>
-            RaidTrackerUI_CreateWindowRaidlist();
-            RaidTrackerUI_CreateRaidMemberListFrame();
-            this:Hide();
           </OnClick>
         </Scripts>
       </Button>
@@ -82,7 +69,7 @@
   <Frame name="RaidTrackerPositionProbe" frameStrata="DIALOG" toplevel="true" parent="RaidTrackerGUI" hidden="false" movable="true" enableMouse="true">
     <Size><AbsDimension x="80" y="20"/></Size>
     <Anchors> <Anchor point="CENTER" /></Anchors>
-    <Scripts>
+    <Scripts>	
       <OnLoad>
         this:RegisterForDrag("LeftButton");
       </OnLoad>

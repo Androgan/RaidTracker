@@ -22,6 +22,7 @@ function trackAttendance()
     end
     fillSaved(raidMembers);
   end
+  RaidTrackerUI_UpdateRaidlist();
 end
 
 function fillSaved(raidMembers)

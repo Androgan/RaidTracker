@@ -6,14 +6,14 @@
 -- Globals
 -- ----------------------------------------------------------------------------
 
--- trackedZones = {"Ironforge", "City of Ironforge"}
-trackedZones = {"The Molten Core",
-                "Onyxia's Lair",
-                "Blackwing Lair",
-                "Zul'Gurub",
-                "Ruins of Ahn'Qiraj",
-                "The Temple of Ahn'Qiraj",
-                "Naxxramas"}
+ trackedZones = {"Ironforge", "City of Ironforge"}
+--trackedZones = {"The Molten Core",
+--                "Onyxia's Lair",
+--                "Blackwing Lair",
+--                "Zul'Gurub",
+--                "Ruins of Ahn'Qiraj",
+--                "The Temple of Ahn'Qiraj",
+--                "Naxxramas"}
 starttime = ""
 raidZone = ""
 numRaidMembers = 0
@@ -51,6 +51,10 @@ function RaidTracker_OnEvent(event)
   
   if(event == "PLAYER_LOGOUT") then
     logoutHandler();
+  end
+  
+  if(event == "ADDON_LOADED") then
+    RaidTrackerUI_UpdateRaidlist();
   end
 end
 
@@ -148,7 +152,7 @@ function RaidTracker_Command(msg)
   
   cmd = string.lower(msg)
 
-  if(cmd == "gui") then
+  if(cmd == "gui") or (cmd == "") then
     RaidTrackerUI_ToggleRaidTrackerWindow();
   elseif(cmd == "reset") then
     if not(deleteRecords) then
@@ -175,6 +179,7 @@ function registerEvents()
   this:RegisterEvent("ZONE_CHANGED");
   this:RegisterEvent("RAID_ROSTER_UPDATE");
   this:RegisterEvent("PLAYER_LOGOUT");
+  this:RegisterEvent("ADDON_LOADED");
 end
 
 function pPrint(text)
