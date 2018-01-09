@@ -16,8 +16,9 @@ function RaidTrackerUI_SelectDate()
   for k, v in pairs(RaidAttendance[raidDate].member) do
     if TemplateRaidMemberFontString[raidMember] == nil then
       -- define FintString template for raid participants names
-      TemplateRaidMemberFontString[raidMember] = RaidMemberListFrame:CreateFontString(nil, "OVERLAY")
-      TemplateRaidMemberFontString[raidMember]:SetPoint("LEFT", RaidTrackerGUI, "CENTER", -40, (110 - 15 * raidMember))
+      TemplateRaidMemberFontString[raidMember] = RaidTrackerGUI_MemberListSubframe:CreateFontString(nil, "OVERLAY")
+      pPrint("raidMember(" .. raidMember .. ") / 10: " .. math.floor(raidMember / 10))
+      TemplateRaidMemberFontString[raidMember]:SetPoint("TOPLEFT", RaidTrackerGUI_MemberListSubframe, "TOPLEFT", (3 + math.floor((raidMember - 1) / 20) * 100), (-5 - 15 * mod(raidMember, 20)))
       TemplateRaidMemberFontString[raidMember]:SetFont("Fonts\\FRIZQT__.TTF", 9)
       TemplateRaidMemberFontString[raidMember]:SetWidth(200)
       TemplateRaidMemberFontString[raidMember]:SetJustifyH("LEFT")
@@ -28,8 +29,8 @@ function RaidTrackerUI_SelectDate()
     raidMember = raidMember + 1
   end
   
-  fontStringListLength = RaidMemberListFrame:GetNumRegions()
-  for i = raidMember, fontStringListLength - 1, 1 do
+  fontStringListLength = RaidTrackerGUI_MemberListSubframe:GetNumRegions()
+  for i = raidMember, fontStringListLength - 8, 1 do
     TemplateRaidMemberFontString[i]:SetText("")
   end
 end
@@ -41,20 +42,20 @@ function RaidTrackerUI_UpdateRaidlist()
   for k, v in pairs(RaidAttendance) do
     local line = v.date .. " - " .. v.zone
     
-    local TemplateRaidlistFontString = RaidTrackerGUI:CreateFontString(nil, "OVERLAY")
-    TemplateRaidlistFontString:SetPoint("LEFT", RaidTrackerGUI, "CENTER", -290, (110 - 15 * raidNr))
+    local TemplateRaidlistFontString = RaidTrackerGUI_RaidListSubframe:CreateFontString(nil, "OVERLAY")
+    TemplateRaidlistFontString:SetPoint("TOPLEFT", RaidTrackerGUI_RaidListSubframe, "TOPLEFT", 5, (10 - 15 * raidNr))
     TemplateRaidlistFontString:SetFont("Fonts\\FRIZQT__.TTF", 9)
-    TemplateRaidlistFontString:SetWidth(200)
+    TemplateRaidlistFontString:SetWidth(206)
     TemplateRaidlistFontString:SetJustifyH("LEFT")
     TemplateRaidlistFontString:SetText(line)
     
     if RaidlistFontStringButton[raidNr] == nil then
-      DummyFrame = CreateFrame("Frame",nil,RaidTrackerGUI) -- create frame to ?
+      DummyFrame = CreateFrame("Frame",nil,RaidTrackerGUI_RaidListSubframe) -- create frame to ?
       DummyFrame:Hide()
     
-      RaidlistFontStringButton[raidNr] = CreateFrame("Button",nil,RaidTrackerGUI)
-      RaidlistFontStringButton[raidNr]:SetPoint("LEFT",RaidTrackerGUI, "CENTER", -290 , (110 - 15 * raidNr))
-      RaidlistFontStringButton[raidNr]:SetWidth(200)
+      RaidlistFontStringButton[raidNr] = CreateFrame("Button",nil,RaidTrackerGUI_RaidListSubframe)
+      RaidlistFontStringButton[raidNr]:SetPoint("TOPLEFT",RaidTrackerGUI_RaidListSubframe, "TOPLEFT", 3 , (12 - 15 * raidNr))
+      RaidlistFontStringButton[raidNr]:SetWidth(206)
       RaidlistFontStringButton[raidNr]:SetHeight(15)
       RaidlistFontStringButton[raidNr]:SetBackdrop({bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background"})
       RaidlistFontStringButton[raidNr]:SetScript("OnClick",  RaidTrackerUI_SelectDate)
@@ -71,13 +72,6 @@ end
 -- UI Element Creation
 -- ----------------------------------------------------------------------------
 
-function RaidTrackerUI_CreateRaidMemberListFrame()
-  RaidMemberListFrame = CreateFrame("Frame","RaidMemberListFrame",RaidTrackerGUI, RaidTrackerGUI)
-  RaidMemberListFrame:SetPoint("TOPLEFT",RaidTrackerGUI, "CENTER", -40 , 110)
-  RaidMemberListFrame:SetWidth(250)
-  RaidMemberListFrame:SetHeight(300)
-  RaidMemberListFrame:SetBackdrop({bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background"})
-end
 
 -- ----------------------------------------------------------------------------
 -- Helper

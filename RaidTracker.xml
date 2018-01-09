@@ -17,12 +17,11 @@
   
   <!-- RaidTracker GUI Frame -->
   <Frame name="RaidTrackerGUI" frameStrata="DIALOG" parent="UIParent" hidden="false" movable="true" enableMouse="true">
-    <Size><AbsDimension x="600" y="270"/></Size>
+    <Size><AbsDimension x="650" y="350"/></Size>
     <Anchors> <Anchor point="CENTER" /></Anchors>
     <Scripts>
       <OnLoad>
         this:RegisterForDrag("LeftButton");
-        RaidTrackerUI_CreateRaidMemberListFrame();
         RaidTrackerUI_UpdateRaidlist();
       </OnLoad>
       <OnDragStart>
@@ -44,26 +43,122 @@
         <Anchors>
           <Anchor point="CENTER" relativePoint="CENTER">
             <Offset>
-              <AbsDimension x="0" y="120"/>
+              <AbsDimension x="280" y="-186"/>
             </Offset>
           </Anchor>
         </Anchors>
         <Scripts>
           <OnLoad>
-
           </OnLoad>
           <OnClick>
             RaidTrackerUI_TestButton()
           </OnClick>
         </Scripts>
       </Button>
-      <Layer level="ARTWORK">
-        <FontString name="RaidTrackerTextString" outline="NORMAL" inherits="GameFontNormal" text="" hidden="false">
-          <Anchors><Anchor point="CENTER" relativePoint="CENTER"><Offset><AbsDimension x="0" y="0"/></Offset></Anchor></Anchors>
-        </FontString>
-      </Layer>
+      <!-- RaidTracker Subframe Raidlist -->
+      <Frame name="RaidTrackerGUI_RaidListSubframe" frameStrata="DIALOG" parent="RaidTrackerGUI" hidden="false" movable="true" enableMouse="true">
+        <Size><AbsDimension x="212" y="310"/></Size>
+          <Anchors>
+            <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+              <Offset>
+                <AbsDimension x="10" y="-30"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+        <Backdrop edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+          <TileSize><AbsValue val="32"/></TileSize>
+          <EdgeSize><AbsValue val="8"/></EdgeSize>
+          <BackgroundInsets><AbsInset left="2" right="2" top="2" bottom="2"/></BackgroundInsets>
+        </Backdrop>
+      </Frame>
+      <!-- RaidTracker Subframe Memberlist -->
+      <Frame name="RaidTrackerGUI_MemberListSubframe" frameStrata="DIALOG" parent="RaidTrackerGUI" hidden="false" movable="true" enableMouse="true">
+        <Size><AbsDimension x="400" y="310"/></Size>
+          <Anchors>
+            <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+              <Offset>
+                <AbsDimension x="240" y="-30"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+        <Backdrop edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+          <TileSize><AbsValue val="32"/></TileSize>
+          <EdgeSize><AbsValue val="8"/></EdgeSize>
+          <BackgroundInsets><AbsInset left="2" right="2" top="2" bottom="2"/></BackgroundInsets>
+        </Backdrop>
+      </Frame>
+      <!-- RaidTracker Subframe Title Name -->
+      <Frame name="RaidTrackerGUI_TitleSubframe" frameStrata="DIALOG" parent="RaidTrackerGUI" hidden="false" movable="true" enableMouse="true">
+        <Size><AbsDimension x="80" y="20"/></Size>
+          <Anchors>
+            <Anchor point="CENTER" relativePoint="CENTER">
+              <Offset>
+                <AbsDimension x="0" y="158"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+        <Backdrop edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+          <TileSize><AbsValue val="32"/></TileSize>
+          <EdgeSize><AbsValue val="8"/></EdgeSize>
+          <BackgroundInsets><AbsInset left="2" right="2" top="2" bottom="2"/></BackgroundInsets>
+        </Backdrop>
+      <Layers>
+        <Layer level="ARTWORK">
+          <!-- Frame Title -->
+          <FontString name="RaidTrackerGUI_FrameTitle" outline="NORMAL" inherits="GameFontNormal" text="RaidTracker" hidden="false">
+            <Anchors><Anchor point="CENTER" relativePoint="TOP"><Offset><AbsDimension x="0" y="-10"/></Offset></Anchor></Anchors>
+          </FontString>
+        </Layer>
+      </Layers>  
+      </Frame>
+      <!-- RaidTracker X close button -->
+      <Frame name="RaidTrackerGUI_MemberListSubframe" frameStrata="DIALOG" parent="RaidTrackerGUI" hidden="false" movable="true" enableMouse="true">
+        <Size><AbsDimension x="40" y="20"/></Size>
+          <Anchors>
+            <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+              <Offset>
+                <AbsDimension x="600" y="-6"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+        <Scripts>
+          <OnMouseUp>
+            RaidTrackerUI_ToggleRaidTrackerWindow();
+          </OnMouseUp>
+        </Scripts>
+        <Backdrop edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+          <TileSize><AbsValue val="32"/></TileSize>
+          <EdgeSize><AbsValue val="8"/></EdgeSize>
+          <BackgroundInsets><AbsInset left="2" right="2" top="2" bottom="2"/></BackgroundInsets>
+        </Backdrop>
+        <Layers>
+          <Layer level="ARTWORK">
+            <FontString name="RaidTrackerPositionProbeString" outline="NORMAL" inherits="GameFontNormal" text="x" hidden="false">
+              <Anchors><Anchor point="CENTER" relativePoint="TOP"><Offset><AbsDimension x="0" y="-10"/></Offset></Anchor></Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+      </Frame>
     </Frames>
   </Frame>
+  
+  <!-- RaidTracker Subframes of RaidTrackerGUI ->
+  <Frame name="RaidTrackerGUI_RaidListSubframe" frameStrata="DIALOG" parent="RaidTrackerGUI" hidden="false" movable="true" enableMouse="true">
+    <Size><AbsDimension x="200" y="310"/></Size>
+       <Anchors>
+         <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+           <Offset>
+             <AbsDimension x="10" y="-30"/>
+           </Offset>
+         </Anchor>
+       </Anchors>
+    <Backdrop edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+      <TileSize><AbsValue val="32"/></TileSize>
+      <EdgeSize><AbsValue val="8"/></EdgeSize>
+      <BackgroundInsets><AbsInset left="2" right="2" top="2" bottom="2"/></BackgroundInsets>
+    </Backdrop>
+  </Frame>
+  -->
   
   <!-- RaidTracker Position probe Frame -->
   <Frame name="RaidTrackerPositionProbe" frameStrata="DIALOG" toplevel="true" parent="RaidTrackerGUI" hidden="false" movable="true" enableMouse="true">
