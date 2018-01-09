@@ -9,15 +9,21 @@ local RaidlistFontStringButton = {}
 function RaidTrackerUI_SelectDate()
   local raidDate = ""
   local raidMember = 1
+  local line = 0
+  local row = 0
   local fontStringListLength = 0
 
   raidDate = string.sub(this:GetText(),0, 17)
   
   for k, v in pairs(RaidAttendance[raidDate].member) do
     if TemplateRaidMemberFontString[raidMember] == nil then
+      if line > 19 then
+        line = 0
+        row = row + 1
+      end
       -- define FintString template for raid participants names
       TemplateRaidMemberFontString[raidMember] = RaidTrackerGUI_MemberListSubframe:CreateFontString(nil, "OVERLAY")
-      TemplateRaidMemberFontString[raidMember]:SetPoint("TOPLEFT", RaidTrackerGUI_MemberListSubframe, "TOPLEFT", (3 + math.floor((raidMember - 1) / 20) * 100), (-5 - 15 * mod(raidMember, 20)))
+      TemplateRaidMemberFontString[raidMember]:SetPoint("TOPLEFT", RaidTrackerGUI_MemberListSubframe, "TOPLEFT", (15 + row * 152), (-8 - 15 * line))
       TemplateRaidMemberFontString[raidMember]:SetFont("Fonts\\FRIZQT__.TTF", 9)
       TemplateRaidMemberFontString[raidMember]:SetWidth(200)
       TemplateRaidMemberFontString[raidMember]:SetJustifyH("LEFT")
@@ -26,6 +32,7 @@ function RaidTrackerUI_SelectDate()
       TemplateRaidMemberFontString[raidMember]:SetText(k)
     end
     raidMember = raidMember + 1
+    line = line + 1
   end
   
   fontStringListLength = RaidTrackerGUI_MemberListSubframe:GetNumRegions()
