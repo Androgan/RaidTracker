@@ -17,7 +17,6 @@ function RaidTrackerUI_SelectDate()
     if TemplateRaidMemberFontString[raidMember] == nil then
       -- define FintString template for raid participants names
       TemplateRaidMemberFontString[raidMember] = RaidTrackerGUI_MemberListSubframe:CreateFontString(nil, "OVERLAY")
-      pPrint("raidMember(" .. raidMember .. ") / 10: " .. math.floor(raidMember / 10))
       TemplateRaidMemberFontString[raidMember]:SetPoint("TOPLEFT", RaidTrackerGUI_MemberListSubframe, "TOPLEFT", (3 + math.floor((raidMember - 1) / 20) * 100), (-5 - 15 * mod(raidMember, 20)))
       TemplateRaidMemberFontString[raidMember]:SetFont("Fonts\\FRIZQT__.TTF", 9)
       TemplateRaidMemberFontString[raidMember]:SetWidth(200)
