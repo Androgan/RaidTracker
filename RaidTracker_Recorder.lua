@@ -17,8 +17,8 @@ function trackAttendance()
     
     numRaidMembers = GetNumRaidMembers();
     for x = 1, numRaidMembers, 1 do
-      name = GetRaidRosterInfo(x);
-      raidMembers[name] = true
+      name, _, _, _, class = GetRaidRosterInfo(x);
+      raidMembers[name] = class
     end
     fillSaved(raidMembers);
   end
@@ -52,9 +52,9 @@ function mergeDuplicates()
          not isSameTime(datetime, kx)) then
         firstMembers = RaidAttendance[datetime].member
         secondMembers = tblx["member"]
-        for member, _ in pairs(secondMembers) do
+        for member, class in pairs(secondMembers) do
           if not(firstMembers[member]) then
-            firstMembers[member] = true
+            firstMembers[member] = class
           end
         end
         RaidAttendance[kx] = nil
