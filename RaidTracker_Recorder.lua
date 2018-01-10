@@ -71,6 +71,12 @@ function RaidTracker_AddTag()
     RaidAttendance[currentlySelectedRaid].tag = this.value
   end
 end
+
+function RaidTracker_PopupAddTag()
+  tag = this.value
+  UIDropDownMenu_SetSelectedValue(RaidTrackerGUI_PopupTagDropDown, this.value)
+  RaidAttendance[starttime].tag = this.value
+end
 -- ----------------------------------------------------------------------------
 -- Helpers
 -- ----------------------------------------------------------------------------

@@ -178,6 +178,87 @@
   </Frame>
   -->
   
+  <!-- RaidTracker TagPopup -->
+  <Frame name="RaidTrackerGUI_RaidTagPopup" frameStrata="DIALOG" toplevel="true" parent="UIParent" hidden="true" movable="true" enableMouse="true">
+    <Size><AbsDimension x="180" y="90"/></Size>
+          <Anchors>
+            <Anchor point="CENTER" relativePoint="CENTER">
+              <Offset>
+                <AbsDimension x="0" y="280"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+    <Scripts>	
+      <OnLoad>
+      </OnLoad>
+      <OnDragStart>
+      </OnDragStart>
+      <OnDragStop>
+      </OnDragStop>
+    </Scripts>
+    <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+      <TileSize><AbsValue val="32"/></TileSize>
+      <EdgeSize><AbsValue val="8"/></EdgeSize>
+      <BackgroundInsets><AbsInset left="2" right="2" top="2" bottom="2"/></BackgroundInsets>
+    </Backdrop>
+    <Layers>
+      <Layer level="ARTWORK">
+        <FontString name="RaidTrackerGUI_RaitTagPopupTitleString" outline="NORMAL" inherits="GameFontNormal" text="Select Tag for this Raid" hidden="false">
+          <Anchors><Anchor point="CENTER" relativePoint="TOP"><Offset><AbsDimension x="0" y="-15"/></Offset></Anchor></Anchors>
+        </FontString>
+      </Layer>
+    </Layers>
+    <Frames>
+      <!-- RaidTracker TagPopup DropDown -->
+   		<Button name="RaidTrackerGUI_PopupTagDropDown" inherits="UIDropDownMenuTemplate">
+        <Size><AbsDimension x="165" y="32"/></Size>
+        <Anchors><Anchor point="Top"><Offset><AbsDimension x="0" y="-30"/></Offset></Anchor></Anchors> 
+        <Scripts>
+          <OnShow>
+            UIDropDownMenu_Initialize(this,RaidTrackerGUI_PopupTagDropDown_Fill);
+          </OnShow>
+        </Scripts>
+    	</Button>
+      <!--  RaidTracker TagPopup Accept -->
+      <Frame name="RaidTrackerGUI_PopupAccept" frameStrata="DIALOG" parent="RaidTrackerGUI_RaidTagPopup" hidden="false" enableMouse="true">
+        <Size><AbsDimension x="60" y="20"/></Size>
+          <Anchors>
+            <Anchor point="TOP" relativePoint="Top">
+              <Offset>
+                <AbsDimension x="0" y="-63"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+        <Scripts>
+          <OnMouseUp>
+            RaidTrackerGUI_RaidTagPopup:Hide()
+          </OnMouseUp>
+        </Scripts>
+        <Backdrop edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+          <TileSize><AbsValue val="32"/></TileSize>
+          <EdgeSize><AbsValue val="8"/></EdgeSize>
+          <BackgroundInsets><AbsInset left="2" right="2" top="2" bottom="2"/></BackgroundInsets>
+        </Backdrop>
+        <Layers>
+          <Layer level="ARTWORK">
+            <FontString name="RaidTrackerCloseButton" outline="NORMAL" inherits="GameFontNormal" text="Accept" hidden="false">
+              <Anchors>
+                <Anchor point="CENTER" relativePoint="TOP">
+                  <Offset>
+                    <AbsDimension x="0" y="-10"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+              <Color r="1.0" g="1" b="1"/>
+            </FontString>
+          </Layer>
+        </Layers>
+      </Frame>
+    </Frames>
+  </Frame>
+
+
+
   <!-- RaidTracker Position probe Frame -->
   <Frame name="RaidTrackerPositionProbe" frameStrata="DIALOG" toplevel="true" parent="RaidTrackerGUI" hidden="false" movable="true" enableMouse="true">
     <Size><AbsDimension x="80" y="20"/></Size>

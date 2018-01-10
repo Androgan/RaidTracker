@@ -68,9 +68,13 @@ function zoneChangeEventHandler()
   if(raidZone ~= GetZoneText() and
      searchInTable(GetZoneText(), trackedZones)) then
     starttime = ""
-    raidZone = ""
+    raidZone = ""    
   end
   trackAttendance();
+  if checkTracking() == true and (RaidAttendance[starttime].tag == "" or RaidAttendance[starttime].tag == nil) then
+    RaidTrackerGUI_RaidTagPopup:Show()
+  end
+    
 end
 
 function rosterUpdateHandler()

@@ -93,6 +93,14 @@ function RaidTrackerGUI_TagDropDown_Fill()
     UIDropDownMenu_AddButton{ text = v; func = RaidTracker_AddTag; value = v};
   end
 end
+-- Populate the RaidTrackerGUI_PopupTagDropDown menue
+function RaidTrackerGUI_PopupTagDropDown_Fill()
+  for k, v in pairs(raidTags) do
+    if v ~= "" then
+      UIDropDownMenu_AddButton{ text = v; func = RaidTracker_PopupAddTag; value = v};
+    end
+  end
+end
 
 -- ----------------------------------------------------------------------------
 -- Helper
