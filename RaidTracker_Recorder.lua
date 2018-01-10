@@ -9,6 +9,7 @@ function trackAttendance()
   if(checkTracking()) then
     if(starttime == "") then
       starttime = date();
+      starttime = string.gsub(starttime, "/", ".");
     end
     
     if(raidZone == "") then
