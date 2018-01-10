@@ -6,7 +6,7 @@
 -- Globals
 -- ----------------------------------------------------------------------------
 
- trackedZones = {"Ironforge", "City of Ironforge"}
+trackedZones = {"Ironforge", "City of Ironforge"}
 --trackedZones = {"The Molten Core",
 --                "Onyxia's Lair",
 --                "Blackwing Lair",
@@ -14,6 +14,12 @@
 --                "Ruins of Ahn'Qiraj",
 --                "The Temple of Ahn'Qiraj",
 --                "Naxxramas"}
+raidTags =       {"Guild Raid",
+                  "Twink Raid",
+                  "Pug Raid",
+                  "Private Raid",
+                  ""}
+
 starttime = ""
 raidZone = ""
 numRaidMembers = 0

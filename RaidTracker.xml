@@ -55,6 +55,21 @@
           </OnClick>
         </Scripts>
       </Button>
+      <!-- MessageConfigure ComboBox -->
+   		<Button name="RaidTrackerGUI_TagDropDown" inherits="UIDropDownMenuTemplate" hidden="true">
+        <Size><AbsDimension x="165" y="32"/></Size>
+        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="400" y="-5"/></Offset></Anchor></Anchors>        <Backdrop edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+          <TileSize><AbsValue val="32"/></TileSize>
+          <EdgeSize><AbsValue val="8"/></EdgeSize>
+          <BackgroundInsets><AbsInset left="2" right="2" top="2" bottom="2"/></BackgroundInsets>
+        </Backdrop>
+        <Scripts>
+          <OnShow>
+            UIDropDownMenu_Initialize(this,RaidTrackerGUI_TagDropDown_Fill);
+            UIDropDownMenu_SetSelectedValue(RaidTrackerGUI_TagDropDown, RaidAttendance[currentlySelectedRaid].tag)
+          </OnShow>
+        </Scripts>
+    	</Button>
       <!-- RaidTracker Subframe Raidlist -->
       <Frame name="RaidTrackerGUI_RaidListSubframe" frameStrata="DIALOG" parent="RaidTrackerGUI" hidden="false" movable="true" enableMouse="true">
         <Size><AbsDimension x="212" y="310"/></Size>
@@ -133,8 +148,15 @@
         </Backdrop>
         <Layers>
           <Layer level="ARTWORK">
-            <FontString name="RaidTrackerPositionProbeString" outline="NORMAL" inherits="GameFontNormal" text="x" hidden="false">
-              <Anchors><Anchor point="CENTER" relativePoint="TOP"><Offset><AbsDimension x="0" y="-10"/></Offset></Anchor></Anchors>
+            <FontString name="RaidTrackerCloseButton" outline="NORMAL" inherits="GameFontNormal" text="x" hidden="false">
+              <Anchors>
+                <Anchor point="CENTER" relativePoint="TOP">
+                  <Offset>
+                    <AbsDimension x="0" y="-9.5"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+              <Color r="1.0" g="1" b="1"/>
             </FontString>
           </Layer>
         </Layers>

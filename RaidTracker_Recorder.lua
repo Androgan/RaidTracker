@@ -63,6 +63,16 @@ function mergeDuplicates()
   end
 end
 
+function RaidTracker_AddTag()
+  if currentlySelectedRaid == "" then
+    pPrint("No raid Selected")
+  else
+    --todo set entry here if exists
+    UIDropDownMenu_SetSelectedValue(RaidTrackerGUI_TagDropDown, this.value)    
+    pPrint(this.value .. " now selected! Starttime: " .. currentlySelectedRaid)
+    RaidAttendance[currentlySelectedRaid].tag = this.value
+  end
+end
 -- ----------------------------------------------------------------------------
 -- Helpers
 -- ----------------------------------------------------------------------------

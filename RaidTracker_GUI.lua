@@ -2,6 +2,7 @@
 -- RaidTracker GUI for viewing recorded Raids
 -- ----------------------------------------------------------------------------
 
+currentlySelectedRaid = ""
 local TemplateRaidMemberFontString = {}
 local RaidlistFontStringButton = {}
 
@@ -14,6 +15,7 @@ function RaidTrackerUI_SelectDate()
   local fontStringListLength = 0
 
   raidDate = string.sub(this:GetText(),0, 17)
+  currentlySelectedRaid = raidDate
   
   for k, v in pairs(RaidAttendance[raidDate].member) do
     if TemplateRaidMemberFontString[raidMember] == nil then
@@ -39,8 +41,29 @@ function RaidTrackerUI_SelectDate()
   for i = raidMember, fontStringListLength - 8, 1 do
     TemplateRaidMemberFontString[i]:SetText("")
   end
+  
+  --update tag dropdown menu
+  --local checking = RaidTrackerGUI_TagDropDown:GetBackdrop()
+  --for k, v in pairs(checking) do
+  --  if type(v) == "table" then
+  --    pPrint("Table: " .. k)
+  --    for l, w in pairs(checking) do
+  --      pPrint("   Key: " .. l .. " Value: " .. w)
+  --    end
+  --  else
+  --    pPrint("Key: " .. k .. " Value: " .. v)
+  --  end
+  --end
+  --\test
+  if RaidAttendance[currentlySelectedRaid].tag == nil then
+    pPrint("No Tag ")
+    RaidAttendance[currentlySelectedRaid].tag = ""
+  end
+  UIDropDownMenu_SetSelectedValue(RaidTrackerGUI_TagDropDown, RaidAttendance[currentlySelectedRaid].tag) --RaidAttendance[currentlySelectedRaid].tag);
+  RaidTrackerGUI_TagDropDown:Show()
 end
 
+-- update list of all raids
 function RaidTrackerUI_UpdateRaidlist()
   local raidNr = 1
   local DummyFrame = nil
@@ -77,7 +100,16 @@ end
 -- ----------------------------------------------------------------------------
 -- UI Element Creation
 -- ----------------------------------------------------------------------------
-
+-- Populate the RaidTrackerGUI_TagDropDown menue
+function RaidTrackerGUI_TagDropDown_Fill()
+  for k, v in pairs(raidTags) do
+    UIDropDownMenu_AddButton{ text = v; func = RaidTracker_AddTag; value = v};
+  end
+    --UIDropDownMenu_AddButton{ text = "Healing (Green)"; func = QuickHeal_ComboBoxMessageConfigure_Click; value = "Healing" };
+    --UIDropDownMenu_AddButton{ text = "Info (Blue)"; func = QuickHeal_ComboBoxMessageConfigure_Click; value = "Info" };
+    --UIDropDownMenu_AddButton{ text = "Blacklist (Yellow)"; func = QuickHeal_ComboBoxMessageConfigure_Click; value = "Blacklist" };
+    --UIDropDownMenu_AddButton{ text = "Error (Red)"; func = QuickHeal_ComboBoxMessageConfigure_Click; value = "Error" };
+end
 
 -- ----------------------------------------------------------------------------
 -- Helper
