@@ -42,19 +42,7 @@ function RaidTrackerUI_SelectDate()
     TemplateRaidMemberFontString[i]:SetText("")
   end
   
-  --update tag dropdown menu
-  --local checking = RaidTrackerGUI_TagDropDown:GetBackdrop()
-  --for k, v in pairs(checking) do
-  --  if type(v) == "table" then
-  --    pPrint("Table: " .. k)
-  --    for l, w in pairs(checking) do
-  --      pPrint("   Key: " .. l .. " Value: " .. w)
-  --    end
-  --  else
-  --    pPrint("Key: " .. k .. " Value: " .. v)
-  --  end
-  --end
-  --\test
+    --update tag dropdown menu
   if RaidAttendance[currentlySelectedRaid].tag == nil then
     RaidAttendance[currentlySelectedRaid].tag = ""
   end

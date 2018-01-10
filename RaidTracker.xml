@@ -58,11 +58,7 @@
       <!-- RaidTracker Tag DropDown -->
    		<Button name="RaidTrackerGUI_TagDropDown" inherits="UIDropDownMenuTemplate" hidden="true">
         <Size><AbsDimension x="165" y="32"/></Size>
-        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="400" y="-5"/></Offset></Anchor></Anchors>        <Backdrop edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-          <TileSize><AbsValue val="32"/></TileSize>
-          <EdgeSize><AbsValue val="8"/></EdgeSize>
-          <BackgroundInsets><AbsInset left="2" right="2" top="2" bottom="2"/></BackgroundInsets>
-        </Backdrop>
+        <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="400" y="-3.5"/></Offset></Anchor></Anchors> 
         <Scripts>
           <OnShow>
             UIDropDownMenu_Initialize(this,RaidTrackerGUI_TagDropDown_Fill);
