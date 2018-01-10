@@ -55,7 +55,7 @@
           </OnClick>
         </Scripts>
       </Button>
-      <!-- MessageConfigure ComboBox -->
+      <!-- RaidTracker Tag DropDown -->
    		<Button name="RaidTrackerGUI_TagDropDown" inherits="UIDropDownMenuTemplate" hidden="true">
         <Size><AbsDimension x="165" y="32"/></Size>
         <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="400" y="-5"/></Offset></Anchor></Anchors>        <Backdrop edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">

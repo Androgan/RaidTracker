@@ -56,7 +56,6 @@ function RaidTrackerUI_SelectDate()
   --end
   --\test
   if RaidAttendance[currentlySelectedRaid].tag == nil then
-    pPrint("No Tag ")
     RaidAttendance[currentlySelectedRaid].tag = ""
   end
   UIDropDownMenu_SetSelectedValue(RaidTrackerGUI_TagDropDown, RaidAttendance[currentlySelectedRaid].tag) --RaidAttendance[currentlySelectedRaid].tag);
@@ -105,10 +104,6 @@ function RaidTrackerGUI_TagDropDown_Fill()
   for k, v in pairs(raidTags) do
     UIDropDownMenu_AddButton{ text = v; func = RaidTracker_AddTag; value = v};
   end
-    --UIDropDownMenu_AddButton{ text = "Healing (Green)"; func = QuickHeal_ComboBoxMessageConfigure_Click; value = "Healing" };
-    --UIDropDownMenu_AddButton{ text = "Info (Blue)"; func = QuickHeal_ComboBoxMessageConfigure_Click; value = "Info" };
-    --UIDropDownMenu_AddButton{ text = "Blacklist (Yellow)"; func = QuickHeal_ComboBoxMessageConfigure_Click; value = "Blacklist" };
-    --UIDropDownMenu_AddButton{ text = "Error (Red)"; func = QuickHeal_ComboBoxMessageConfigure_Click; value = "Error" };
 end
 
 -- ----------------------------------------------------------------------------
