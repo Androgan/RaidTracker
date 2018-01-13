@@ -2,6 +2,7 @@
   <Script file="RaidTracker.lua"/>
   <Script file="RaidTracker_GUI.lua"/>
   <Script file="RaidTracker_Recorder.lua"/>
+  <Script file="RaidTracker_Sync.lua"/>
   
   <!-- RaidTracker Main Frame -->
   <Frame name="RaidTrackerFrame" hidden="true">

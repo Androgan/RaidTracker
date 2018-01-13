@@ -6,7 +6,7 @@
 -- Globals
 -- ----------------------------------------------------------------------------
 
---trackedZones = {"Ironforge", "City of Ironforge"}
+-- trackedZones = {"Ironforge", "City of Ironforge", "Stormwind Stockade"}
 trackedZones = {"The Molten Core",
                 "Onyxia's Lair",
                 "Blackwing Lair",
@@ -24,6 +24,8 @@ starttime = ""
 raidZone = ""
 numRaidMembers = 0
 deleteRecords = false
+addonPrefix = "RaidTracker"
+me = UnitName("player")
 
 -- ----------------------------------------------------------------------------
 -- Initializing Saved Variables
@@ -62,19 +64,22 @@ function RaidTracker_OnEvent(event)
   if(event == "ADDON_LOADED") then
     RaidTrackerUI_UpdateRaidlist();
   end
+  
+  if(event == "CHAT_MSG_ADDON") then
+    chatMsgAddonHandler(arg1, arg2, arg3, arg4);
+  end
 end
 
 function zoneChangeEventHandler()
   if(raidZone ~= GetZoneText() and
      searchInTable(GetZoneText(), trackedZones)) then
     starttime = ""
-    raidZone = ""    
+    raidZone = ""
   end
   trackAttendance();
   if checkTracking() == true and (RaidAttendance[starttime].tag == "" or RaidAttendance[starttime].tag == nil) then
     RaidTrackerGUI_RaidTagPopup:Show()
   end
-    
 end
 
 function rosterUpdateHandler()
@@ -89,6 +94,34 @@ function logoutHandler()
   else
     mergeDuplicates();
   end
+end
+
+function chatMsgAddonHandler(prefix, message, channel, sender)
+  local versions = {}
+  
+  -- version checking
+  if prefix == addonPrefix and 
+     message == "versioncheck" and
+     sender ~= me then
+    postVersion();
+  elseif prefix == addonPrefix .. "Version" and
+         sender ~= me then
+    pPrint(message)
+  
+  -- syncing
+  elseif prefix == addonPrefix and
+         message == "sync" and
+         sender ~= me then
+    postRecordedRaids()
+  elseif prefix == addonPrefix and
+         string.sub(message, 1, 6) == "record" and
+         sender ~= me then
+    syncRecievedRaid(string.sub(message, 7))
+  end
+end
+
+function postVersion()
+  SendAddonMessage(addonPrefix .. "Version", me .. " - " .. getVersion())
 end
 
 -- ----------------------------------------------------------------------------
@@ -172,10 +205,17 @@ function RaidTracker_Command(msg)
       deleteRecords = false
       pPrint("No longer deleting records on next logout.");
     end
+  elseif(cmd == "check") then
+    pPrint(me .. " - " .. getVersion());
+    SendAddonMessage(addonPrefix, "versioncheck")
+  elseif(cmd == "sync") then
+    SendAddonMessage(addonPrefix, "sync")
   else
     pPrint("Version " .. getVersion() .. " Usage:");
     pPrint("/rt gui - Opens up the RaidTracker Window.");
     pPrint("/rt reset - Set flag to delete records on logout.");
+    pPrint("/rt check - Checks other addons Versions.");
+    pPrint("/rt sync - Syncs other players Raids into own Raids.");
   end
 end
 
@@ -190,6 +230,7 @@ function registerEvents()
   this:RegisterEvent("RAID_ROSTER_UPDATE");
   this:RegisterEvent("PLAYER_LOGOUT");
   this:RegisterEvent("ADDON_LOADED");
+  this:RegisterEvent("CHAT_MSG_ADDON");
 end
 
 function pPrint(text)
