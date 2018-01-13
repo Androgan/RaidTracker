@@ -6,14 +6,14 @@
 -- Globals
 -- ----------------------------------------------------------------------------
 
-trackedZones = {"Ironforge", "City of Ironforge"}
---trackedZones = {"The Molten Core",
---                "Onyxia's Lair",
---                "Blackwing Lair",
---                "Zul'Gurub",
---                "Ruins of Ahn'Qiraj",
---                "The Temple of Ahn'Qiraj",
---                "Naxxramas"}
+--trackedZones = {"Ironforge", "City of Ironforge"}
+trackedZones = {"The Molten Core",
+                "Onyxia's Lair",
+                "Blackwing Lair",
+                "Zul'Gurub",
+                "Ruins of Ahn'Qiraj",
+                "The Temple of Ahn'Qiraj",
+                "Naxxramas"}
 raidTags =       {"Guild Raid",
                   "Twink Raid",
                   "Pug Raid",
