@@ -20,19 +20,19 @@ raidTags =       {"Guild Raid",
                   "Private Raid",
                   ""}
 
-starttime = ""
-raidZone = ""
 numRaidMembers = 0
 deleteRecords = false
 addonPrefix = "RaidTracker"
 me = UnitName("player")
+bDebug = true
+activeRaid = {}
 
 -- ----------------------------------------------------------------------------
 -- Initializing Saved Variables
 -- ----------------------------------------------------------------------------
 
 if(RaidAttendance == nil) then
-  RaidAttendance = {};
+  RaidAttendance = {}
 end
 
 -- ----------------------------------------------------------------------------
@@ -40,59 +40,47 @@ end
 -- ----------------------------------------------------------------------------
 
 function RaidTracker_OnLoad()
-  registerEvents();
-  registerSlashCommands();
+  registerEvents()
+  registerSlashCommands()
   
-  pPrint("Version " .. getVersion() .. " loaded.");
+  pPrint("Version " .. getVersion() .. " loaded.")
 end
 
 function RaidTracker_OnEvent(event)
-  if(event == "ZONE_CHANGED_NEW_AREA" or
-     event == "ZONE_CHANGED_INDOORS" or
-     event == "ZONE_CHANGED") then
-    zoneChangeEventHandler();
+  if(event == "ZONE_CHANGED_NEW_AREA") then
+    trackAttendance()
   end
   
   if(event == "RAID_ROSTER_UPDATE") then
-    rosterUpdateHandler();
+    rosterUpdateHandler()
   end
   
   if(event == "PLAYER_LOGOUT") then
-    logoutHandler();
+    logoutHandler()
   end
   
   if(event == "ADDON_LOADED") then
-    RaidTrackerUI_UpdateRaidlist();
+    RaidTrackerUI_UpdateRaidlist()
   end
   
   if(event == "CHAT_MSG_ADDON") then
-    chatMsgAddonHandler(arg1, arg2, arg3, arg4);
-  end
-end
-
-function zoneChangeEventHandler()
-  if(raidZone ~= GetZoneText() and
-     searchInTable(GetZoneText(), trackedZones)) then
-    starttime = ""
-    raidZone = ""
-  end
-  trackAttendance();
-  if checkTracking() == true and (RaidAttendance[starttime].tag == "" or RaidAttendance[starttime].tag == nil) then
-    RaidTrackerGUI_RaidTagPopup:Show()
+    chatMsgAddonHandler(arg1, arg2, arg3, arg4)
   end
 end
 
 function rosterUpdateHandler()
-  if(playerLeaveOrEnter()) then
-    trackAttendance();
+  if(didPlayerEnter()) then
+    trackAttendance()
   end
+end
+
+function didPlayerEnter()
+  return numRaidMembers < GetNumRaidMembers()
 end
 
 function logoutHandler()
   if(deleteRecords) then
     RaidAttendance = {}
-  else
-    mergeDuplicates();
   end
 end
 
@@ -103,7 +91,7 @@ function chatMsgAddonHandler(prefix, message, channel, sender)
   if prefix == addonPrefix and 
      message == "versioncheck" and
      sender ~= me then
-    postVersion();
+    postVersion()
   elseif prefix == addonPrefix .. "Version" and
          sender ~= me then
     pPrint(message)
@@ -225,8 +213,6 @@ end
 
 function registerEvents()
   this:RegisterEvent("ZONE_CHANGED_NEW_AREA");
-  this:RegisterEvent("ZONE_CHANGED_INDOORS");
-  this:RegisterEvent("ZONE_CHANGED");
   this:RegisterEvent("RAID_ROSTER_UPDATE");
   this:RegisterEvent("PLAYER_LOGOUT");
   this:RegisterEvent("ADDON_LOADED");
@@ -237,15 +223,25 @@ function pPrint(text)
   DEFAULT_CHAT_FRAME:AddMessage("RaidTracker: " .. text);
 end
 
+function debugPrint(text)
+  if bDebug then
+    DEFAULT_CHAT_FRAME:AddMessage("RaidTrackerDebug: " .. text);
+  end
+end
+
 function printTableKeys(tbl)
   for k, v in pairs(tbl) do
-    pPrint(k);
+    pPrint(k)
   end
 end
 
 function printTableVals(tbl)
   for k, v in pairs(tbl) do
-    pPrint(v);
+    if type(v) == "string" then
+      pPrint(v);
+    elseif type(v) == "table" then
+      printTableKeys(v)
+    end
   end
 end
 

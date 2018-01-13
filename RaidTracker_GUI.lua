@@ -13,8 +13,8 @@ function RaidTrackerUI_SelectDate()
   local line = 0
   local row = 0
   local fontStringListLength = 0
-
-  raidDate = string.sub(this:GetText(),0, 17)
+  
+  raidDate = this:GetID()
   currentlySelectedRaid = raidDate
   
   for k, v in pairs(RaidAttendance[raidDate].member) do
@@ -56,7 +56,7 @@ function RaidTrackerUI_UpdateRaidlist()
   local DummyFrame = nil
   
   for k, v in pairs(RaidAttendance) do
-    local line = v.date .. " - " .. v.zone
+    local line = date("%a %d.%m.%y", v.date) .. " - " .. v.zone
     
     local TemplateRaidlistFontString = RaidTrackerGUI_RaidListSubframe:CreateFontString(nil, "OVERLAY")
     TemplateRaidlistFontString:SetPoint("TOPLEFT", RaidTrackerGUI_RaidListSubframe, "TOPLEFT", 5, (10 - 15 * raidNr))
@@ -74,11 +74,13 @@ function RaidTrackerUI_UpdateRaidlist()
       RaidlistFontStringButton[raidNr]:SetWidth(206)
       RaidlistFontStringButton[raidNr]:SetHeight(15)
       RaidlistFontStringButton[raidNr]:SetBackdrop({bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background"})
-      RaidlistFontStringButton[raidNr]:SetScript("OnClick",  RaidTrackerUI_SelectDate)
+      RaidlistFontStringButton[raidNr]:SetScript("OnClick", RaidTrackerUI_SelectDate)
       RaidlistFontStringButton[raidNr]:SetFont("Fonts\\FRIZQT__.TTF", 9)
       RaidlistFontStringButton[raidNr]:SetFontString(TemplateRaidlistFontString)
+      RaidlistFontStringButton[raidNr]:SetID(v.date)
     else
       RaidlistFontStringButton[raidNr]:SetFontString(TemplateRaidlistFontString)
+      RaidlistFontStringButton[raidNr]:SetID(v.date)
     end
     raidNr = raidNr + 1
   end
@@ -107,6 +109,8 @@ end
 -- ----------------------------------------------------------------------------
 
 function RaidTrackerUI_TestButton()
+  printTableVals(activeRaid)
+  RaidTrackerUI_UpdateRaidlist();
   pPrint("Test button")
 end
 

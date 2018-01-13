@@ -3,79 +3,60 @@
 -- ----------------------------------------------------------------------------
 
 function trackAttendance()
-  local raidMembers = {}
   local name = ""
+  local class = ""
+  local raidMembers = {}
   
   if(checkTracking()) then
-    if(starttime == "") then
-      starttime = date();
-      starttime = string.gsub(starttime, "/", ".");
+    activeRaid = RaidAttendance[selectActiveRaid()]
+    
+    if activeRaid == nil then
+      activeRaid = {}
+      activeRaid["zone"] = GetRealZoneText()
+      activeRaid["date"] = time()
+      activeRaid["member"] = {}
+      activeRaid["tag"] = ""
+      
+      RaidTrackerGUI_RaidTagPopup:Show()
     end
     
-    if(raidZone == "") then
-      raidZone = GetZoneText();
-    end
-    
-    numRaidMembers = GetNumRaidMembers();
+    numRaidMembers = GetNumRaidMembers()
+    pPrint(numRaidMembers)
     for x = 1, numRaidMembers, 1 do
-      name, _, _, _, class = GetRaidRosterInfo(x);
-      raidMembers[name] = class
+      name, _, _, _, class = GetRaidRosterInfo(x)
+      raidMembers[name] = {["class"] = class}
     end
-    fillSaved(raidMembers);
-  end
-  RaidTrackerUI_UpdateRaidlist();
-end
-
-function fillSaved(raidMembers)
-  local newRaid = {}
-  
-  newRaid["zone"] = raidZone;
-  newRaid["member"] = raidMembers;
-  newRaid["date"] = starttime;
-  
-  RaidAttendance[starttime] = newRaid;
-end
-
-function mergeDuplicates()
-  local datetime = ""
-  local zone = ""
-  local firstMembers = {}
-  local secondMembers = {}
-  local additionalMembers = {}
-  
-  for k, tbl in pairs(RaidAttendance) do
-    zone = tbl["zone"]
-    datetime = findOldestRaidOfDay(k, zone);
     
-    for kx, tblx in pairs(RaidAttendance) do
-      if(isSameDay(datetime, kx) and
-         zone == tblx["zone"] and
-         not isSameTime(datetime, kx)) then
-        firstMembers = RaidAttendance[datetime].member
-        secondMembers = tblx["member"]
-        for member, class in pairs(secondMembers) do
-          if not(firstMembers[member]) then
-            firstMembers[member] = class
-          end
-        end
-        RaidAttendance[kx] = nil
-      end
+    activeRaid["member"] = raidMembers
+    
+    RaidAttendance[activeRaid.date] = activeRaid
+    RaidTrackerUI_UpdateRaidlist()
+  end
+end
+
+function selectActiveRaid()
+  for k, tbl in pairs(RaidAttendance) do
+    if (k > (time() - 43200)) and
+       (tbl["zone"] == GetRealZoneText()) then
+      debugPrint("found previous raid" .. k)
+      return k
     end
   end
+  
+  debugPrint("found no prev raid" .. time())
+  return time()
 end
 
 function RaidTracker_AddTag()
-  if currentlySelectedRaid == "" then
-  else
+  if currentlySelectedRaid ~= "" then
     UIDropDownMenu_SetSelectedValue(RaidTrackerGUI_TagDropDown, this.value) 
     RaidAttendance[currentlySelectedRaid].tag = this.value
   end
 end
 
 function RaidTracker_PopupAddTag()
-  tag = this.value
   UIDropDownMenu_SetSelectedValue(RaidTrackerGUI_PopupTagDropDown, this.value)
-  RaidAttendance[starttime].tag = this.value
+  RaidAttendance[selectActiveRaid()].tag = this.value
 end
 -- ----------------------------------------------------------------------------
 -- Helpers
@@ -97,8 +78,4 @@ function searchInTable(search, tbl)
     end
   end
   return false
-end
-
-function playerLeaveOrEnter()
-  return numRaidMembers ~= GetNumRaidMembers()
 end
