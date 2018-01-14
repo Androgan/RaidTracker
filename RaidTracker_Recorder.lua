@@ -64,7 +64,7 @@ end
 function RaitTracker_SortRaidAttendanceTable()
   pPrint("preSort: ")
   printTableKeys(RaidAttendance)
-  sort(RaidAttendance function(a,b) return a>b end)
+  sort(RaidAttendance, function(a,b) return a>b end)
   pPrint("postSort: ")
   printTableKeys(RaidAttendance)
 end
