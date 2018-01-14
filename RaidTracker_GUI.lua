@@ -56,7 +56,7 @@ function RaidTrackerUI_UpdateRaidlist()
   
   for k, v in pairs(RaidAttendance) do
     local line = date("%a %d.%m.%y", v.date) .. " - " .. v.zone
-    for l = 1, (38 - string.len(line)) do
+    for l = 1, (38.5 - string.len(line)) do
          line = line .. " "
     end
     
@@ -64,7 +64,7 @@ function RaidTrackerUI_UpdateRaidlist()
     
       RaidlistFontStringButton[raidNr] = CreateFrame("Button",nil,RaidTrackerGUI_RaidListSubframe)
       RaidlistFontStringButton[raidNr]:SetPoint("TOPLEFT",RaidTrackerGUI_RaidListSubframe, "TOPLEFT", 3 , (12 - 15 * raidNr))
-      RaidlistFontStringButton[raidNr]:SetWidth(206)
+      RaidlistFontStringButton[raidNr]:SetWidth(208)
       RaidlistFontStringButton[raidNr]:SetHeight(15)
       RaidlistFontStringButton[raidNr]:SetBackdrop({bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background"})
       RaidlistFontStringButton[raidNr]:SetScript("OnClick", RaidTrackerUI_SelectDate)
@@ -141,7 +141,9 @@ function RaidTrackerUI_ToggleRaidTrackerWindow()
 end
 
 function RaidTrackerGUI_Initialize()
-  RaidTrackerUI_UpdateRaidlist()
+  if RaidAttendance ~= nil then
+    RaidTrackerUI_UpdateRaidlist()
+  end
 end
 
 function RaidTrackerGUI_GetClassClolor(class)

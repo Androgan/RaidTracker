@@ -61,6 +61,16 @@ end
 -- ----------------------------------------------------------------------------
 -- Helpers
 -- ----------------------------------------------------------------------------
+function RaitTracker_SortRaidAttendanceTable()
+  pPrint("preSort: ")
+  printTableKeys(RaidAttendance)
+  sort(RaidAttendance function(a,b) return a>b end)
+  pPrint("postSort: ")
+  printTableKeys(RaidAttendance)
+end
+
+
+
 
 function checkTracking()
   local track = false

@@ -59,7 +59,8 @@ function RaidTracker_OnEvent(event)
     logoutHandler()
   end
   
-  if(event == "ADDON_LOADED") then    
+  if(event == "ADDON_LOADED" and arg1 == "RaidTracker") then
+    RaitTracker_SortRaidAttendanceTable()
     RaidTrackerGUI_Initialize()
   end
   
