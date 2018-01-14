@@ -59,8 +59,8 @@ function RaidTracker_OnEvent(event)
     logoutHandler()
   end
   
-  if(event == "ADDON_LOADED") then
-    RaidTrackerUI_UpdateRaidlist()
+  if(event == "ADDON_LOADED") then    
+    RaidTrackerGUI_Initialize()
   end
   
   if(event == "CHAT_MSG_ADDON") then

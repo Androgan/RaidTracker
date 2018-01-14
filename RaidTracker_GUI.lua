@@ -18,25 +18,24 @@ function RaidTrackerUI_SelectDate()
   currentlySelectedRaid = raidDate
   
   for k, v in pairs(RaidAttendance[raidDate].member) do
+    if line > 19 then
+      line = 0
+      row = row + 1
+    end
     if TemplateRaidMemberFontString[raidMember] == nil then
-      if line > 19 then
-        line = 0
-        row = row + 1
-      end
       -- define FintString template for raid participants names
       TemplateRaidMemberFontString[raidMember] = RaidTrackerGUI_MemberListSubframe:CreateFontString(nil, "OVERLAY")
       TemplateRaidMemberFontString[raidMember]:SetPoint("TOPLEFT", RaidTrackerGUI_MemberListSubframe, "TOPLEFT", (15 + row * 152), (-8 - 15 * line))
       TemplateRaidMemberFontString[raidMember]:SetFont("Fonts\\FRIZQT__.TTF", 9)
       TemplateRaidMemberFontString[raidMember]:SetWidth(200)
       TemplateRaidMemberFontString[raidMember]:SetJustifyH("LEFT")
-      TemplateRaidMemberFontString[raidMember]:SetText(k)
-    else
-      TemplateRaidMemberFontString[raidMember]:SetText(k)
     end
+    TemplateRaidMemberFontString[raidMember]:SetText(k)
+    TemplateRaidMemberFontString[raidMember]:SetTextColor(RaidTrackerGUI_GetClassClolor(RaidAttendance[raidDate].member[k].class))
+    
     raidMember = raidMember + 1
     line = line + 1
   end
-  
   fontStringListLength = RaidTrackerGUI_MemberListSubframe:GetNumRegions()
   for i = raidMember, fontStringListLength - 8, 1 do
     TemplateRaidMemberFontString[i]:SetText("")
@@ -53,21 +52,15 @@ end
 -- update list of all raids
 function RaidTrackerUI_UpdateRaidlist()
   local raidNr = 1
-  local DummyFrame = nil
+  --local DummyFrame = nil
   
   for k, v in pairs(RaidAttendance) do
     local line = date("%a %d.%m.%y", v.date) .. " - " .. v.zone
-    
-    local TemplateRaidlistFontString = RaidTrackerGUI_RaidListSubframe:CreateFontString(nil, "OVERLAY")
-    TemplateRaidlistFontString:SetPoint("TOPLEFT", RaidTrackerGUI_RaidListSubframe, "TOPLEFT", 5, (10 - 15 * raidNr))
-    TemplateRaidlistFontString:SetFont("Fonts\\FRIZQT__.TTF", 9)
-    TemplateRaidlistFontString:SetWidth(206)
-    TemplateRaidlistFontString:SetJustifyH("LEFT")
-    TemplateRaidlistFontString:SetText(line)
+    for l = 1, (38 - string.len(line)) do
+         line = line .. " "
+    end
     
     if RaidlistFontStringButton[raidNr] == nil then
-      DummyFrame = CreateFrame("Frame",nil,RaidTrackerGUI_RaidListSubframe) -- create frame to ?
-      DummyFrame:Hide()
     
       RaidlistFontStringButton[raidNr] = CreateFrame("Button",nil,RaidTrackerGUI_RaidListSubframe)
       RaidlistFontStringButton[raidNr]:SetPoint("TOPLEFT",RaidTrackerGUI_RaidListSubframe, "TOPLEFT", 3 , (12 - 15 * raidNr))
@@ -75,13 +68,40 @@ function RaidTrackerUI_UpdateRaidlist()
       RaidlistFontStringButton[raidNr]:SetHeight(15)
       RaidlistFontStringButton[raidNr]:SetBackdrop({bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background"})
       RaidlistFontStringButton[raidNr]:SetScript("OnClick", RaidTrackerUI_SelectDate)
-      RaidlistFontStringButton[raidNr]:SetFont("Fonts\\FRIZQT__.TTF", 9)
-      RaidlistFontStringButton[raidNr]:SetFontString(TemplateRaidlistFontString)
+      RaidlistFontStringButton[raidNr]:SetFont("Interface\\AddOns\\RaidTracker\\fonts\\Anonymous Pro.ttf", 9)
+      RaidlistFontStringButton[raidNr]:SetText(line)
       RaidlistFontStringButton[raidNr]:SetID(v.date)
     else
-      RaidlistFontStringButton[raidNr]:SetFontString(TemplateRaidlistFontString)
+      RaidlistFontStringButton[raidNr]:SetText(line)
       RaidlistFontStringButton[raidNr]:SetID(v.date)
-    end
+    end        
+        
+       -- not deeded with new font
+--    TemplateRaidlistFontString = RaidTrackerGUI_RaidListSubframe:CreateFontString(nil, "OVERLAY")
+--    TemplateRaidlistFontString:SetPoint("TOPLEFT", RaidTrackerGUI_RaidListSubframe, "TOPLEFT", 5, (10 - 15 * raidNr))
+--    TemplateRaidlistFontString:SetFont("Fonts\\FRIZQT__.TTF", 9)
+--    TemplateRaidlistFontString:SetWidth(206)
+--    TemplateRaidlistFontString:SetJustifyH("LEFT")
+--    TemplateRaidlistFontString:SetText(line)
+--    
+--    
+--    if RaidlistFontStringButton[raidNr] == nil then
+--      --DummyFrame = CreateFrame("Frame",nil,RaidTrackerGUI_RaidListSubframe) -- create frame to ?
+--      --DummyFrame:Hide()
+--    
+--      RaidlistFontStringButton[raidNr] = CreateFrame("Button",nil,RaidTrackerGUI_RaidListSubframe)
+--      RaidlistFontStringButton[raidNr]:SetPoint("TOPLEFT",RaidTrackerGUI_RaidListSubframe, "TOPLEFT", 3 , (12 - 15 * raidNr))
+--      RaidlistFontStringButton[raidNr]:SetWidth(206)
+--      RaidlistFontStringButton[raidNr]:SetHeight(15)
+--      RaidlistFontStringButton[raidNr]:SetBackdrop({bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background"})
+--      RaidlistFontStringButton[raidNr]:SetScript("OnClick", RaidTrackerUI_SelectDate)
+--      RaidlistFontStringButton[raidNr]:SetFont("Fonts\\FRIZQT__.TTF", 9)
+--      RaidlistFontStringButton[raidNr]:SetFontString(TemplateRaidlistFontString)
+--      RaidlistFontStringButton[raidNr]:SetID(v.date)
+--    else
+--      RaidlistFontStringButton[raidNr]:SetFontString(TemplateRaidlistFontString)
+--      RaidlistFontStringButton[raidNr]:SetID(v.date)
+--    end
     raidNr = raidNr + 1
   end
 end
@@ -109,9 +129,7 @@ end
 -- ----------------------------------------------------------------------------
 
 function RaidTrackerUI_TestButton()
-  printTableVals(activeRaid)
-  RaidTrackerUI_UpdateRaidlist();
-  pPrint("Test button")
+  pPrint("Test button") 
 end
 
 function RaidTrackerUI_ToggleRaidTrackerWindow()
@@ -119,6 +137,32 @@ function RaidTrackerUI_ToggleRaidTrackerWindow()
     RaidTrackerGUI:Hide();
   else
     RaidTrackerGUI:Show();
+  end
+end
+
+function RaidTrackerGUI_Initialize()
+  RaidTrackerUI_UpdateRaidlist()
+end
+
+function RaidTrackerGUI_GetClassClolor(class)
+  if class == "Warlock"  then
+    return 0.58, 0.51, 0.79,1
+  elseif class == "Druid"  then
+    return 1.00, 0.49, 0.04,1
+  elseif class == "Rogue"  then
+    return 1.00, 0.96, 0.41,1
+  elseif class == "Hunter"  then
+    return 0.67, 0.83, 0.45,1
+  elseif class == "Mage"  then
+    return 0.41, 0.80, 0.94,1
+  elseif class == "Shaman"  then
+    return 0.00, 0.44, 0.87,1
+  elseif class == "Priest"  then
+    return 1.00, 1.00, 1.00,1
+  elseif class == "Paladin"  then
+    return 0.96, 0.55, 0.73,1
+  elseif class == "Warrior"  then
+    return 0.78, 0.61, 0.43,1
   end
 end
 

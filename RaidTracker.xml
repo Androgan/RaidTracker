@@ -4,6 +4,41 @@
   <Script file="RaidTracker_Recorder.lua"/>
   <Script file="RaidTracker_Sync.lua"/>
   
+  
+  
+  
+  
+  
+  
+    <!-- RaidTracker TagPopup -->
+  <Frame name="Fotsd" frameStrata="DIALOG" toplevel="true" parent="UIParent" hidden="true" movable="true" enableMouse="true">
+    <Size><AbsDimension x="180" y="90"/></Size>
+          <Anchors>
+            <Anchor point="CENTER" relativePoint="CENTER">
+              <Offset>
+                <AbsDimension x="0" y="280"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+    <Layers>
+      <Layer level="ARTWORK">
+        <FontString name="Font" outline="NORMAL" inherits="GameFontNormal" text="Select Tag for this Raid" hidden="false">
+          <Anchors><Anchor point="CENTER" relativePoint="TOP"><Offset><AbsDimension x="0" y="-15"/></Offset></Anchor></Anchors>
+        </FontString>
+      </Layer>
+    </Layers>
+  </Frame>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   <!-- RaidTracker Main Frame -->
   <Frame name="RaidTrackerFrame" hidden="true">
     <Scripts>
