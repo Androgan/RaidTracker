@@ -166,7 +166,7 @@
         </Backdrop>
         <Layers>
           <Layer level="ARTWORK">
-            <FontString name="RaidTrackerCloseButton" outline="NORMAL" inherits="GameFontNormal" text="Stats" hidden="false">
+            <FontString name="RaidTrackerGUI_ChangeToStatsPanelButtonFontString" outline="NORMAL" inherits="GameFontNormal" text="Stats" hidden="false">
               <Anchors>
                 <Anchor point="CENTER" relativePoint="TOP">
                   <Offset>
