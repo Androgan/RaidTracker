@@ -13,28 +13,40 @@ function RaidTrackerUI_SelectDate()
   local line = 0
   local row = 0
   local fontStringListLength = 0
+  local sortTable = {Druid = {}, Hunter = {}, Mage = {}, Paladin = {}, Priest = {}, Rogue = {}, Shaman = {}, Warlock = {}, Warrior = {}}
   
   raidDate = this:GetID()
   currentlySelectedRaid = raidDate
   
   for k, v in pairs(RaidAttendance[raidDate].member) do
-    if line > 19 then
-      line = 0
-      row = row + 1
+    table.insert(sortTable[v.class], k)
+  end
+  
+  for k, v in pairs(sortTable) do
+    table.sort(v)
+  end
+  
+  for w, v in pairs(sortTable) do
+      for l, k in pairs(v) do
+  
+      if line > 19 then
+        line = 0
+        row = row + 1
+      end
+      if TemplateRaidMemberFontString[raidMember] == nil then
+        -- define FintString template for raid participants names
+        TemplateRaidMemberFontString[raidMember] = RaidTrackerGUI_MemberListSubframe:CreateFontString(nil, "OVERLAY")
+        TemplateRaidMemberFontString[raidMember]:SetPoint("TOPLEFT", RaidTrackerGUI_MemberListSubframe, "TOPLEFT", (15 + row * 152), (-8 - 15 * line))
+        TemplateRaidMemberFontString[raidMember]:SetFont("Fonts\\FRIZQT__.TTF", 9)
+        TemplateRaidMemberFontString[raidMember]:SetWidth(200)
+        TemplateRaidMemberFontString[raidMember]:SetJustifyH("LEFT")
+      end
+      TemplateRaidMemberFontString[raidMember]:SetText(k)
+      TemplateRaidMemberFontString[raidMember]:SetTextColor(RaidTrackerGUI_GetClassClolor(RaidAttendance[raidDate].member[k].class))
+      
+      raidMember = raidMember + 1
+      line = line + 1
     end
-    if TemplateRaidMemberFontString[raidMember] == nil then
-      -- define FintString template for raid participants names
-      TemplateRaidMemberFontString[raidMember] = RaidTrackerGUI_MemberListSubframe:CreateFontString(nil, "OVERLAY")
-      TemplateRaidMemberFontString[raidMember]:SetPoint("TOPLEFT", RaidTrackerGUI_MemberListSubframe, "TOPLEFT", (15 + row * 152), (-8 - 15 * line))
-      TemplateRaidMemberFontString[raidMember]:SetFont("Fonts\\FRIZQT__.TTF", 9)
-      TemplateRaidMemberFontString[raidMember]:SetWidth(200)
-      TemplateRaidMemberFontString[raidMember]:SetJustifyH("LEFT")
-    end
-    TemplateRaidMemberFontString[raidMember]:SetText(k)
-    TemplateRaidMemberFontString[raidMember]:SetTextColor(RaidTrackerGUI_GetClassClolor(RaidAttendance[raidDate].member[k].class))
-    
-    raidMember = raidMember + 1
-    line = line + 1
   end
   fontStringListLength = RaidTrackerGUI_MemberListSubframe:GetNumRegions()
   for i = raidMember, fontStringListLength - 8, 1 do
@@ -52,10 +64,19 @@ end
 -- update list of all raids
 function RaidTrackerUI_UpdateRaidlist()
   local raidNr = 1
-  --local DummyFrame = nil
+  local sortTable = {}
   
   for k, v in pairs(RaidAttendance) do
-    local line = date("%a %d.%m.%y", v.date) .. " - " .. v.zone
+    table.insert(sortTable, v.date)
+  end
+  table.sort(sortTable, function(a,b) return a>b end)
+  
+  
+  --for k, v in pairs(RaidAttendance) do
+  for k, v in pairs(sortTable) do
+    local line = date("%a %d.%m.%y", v) .. " - " .. RaidAttendance[v].zone
+    
+    -- align text to left
     for l = 1, (38.5 - string.len(line)) do
          line = line .. " "
     end
@@ -70,13 +91,13 @@ function RaidTrackerUI_UpdateRaidlist()
       RaidlistFontStringButton[raidNr]:SetScript("OnClick", RaidTrackerUI_SelectDate)
       RaidlistFontStringButton[raidNr]:SetFont("Interface\\AddOns\\RaidTracker\\fonts\\Anonymous Pro.ttf", 9)
       RaidlistFontStringButton[raidNr]:SetText(line)
-      RaidlistFontStringButton[raidNr]:SetID(v.date)
+      RaidlistFontStringButton[raidNr]:SetID(v)
     else
       RaidlistFontStringButton[raidNr]:SetText(line)
-      RaidlistFontStringButton[raidNr]:SetID(v.date)
+      RaidlistFontStringButton[raidNr]:SetID(v)
     end        
         
-       -- not deeded with new font
+       -- not needed with new font
 --    TemplateRaidlistFontString = RaidTrackerGUI_RaidListSubframe:CreateFontString(nil, "OVERLAY")
 --    TemplateRaidlistFontString:SetPoint("TOPLEFT", RaidTrackerGUI_RaidListSubframe, "TOPLEFT", 5, (10 - 15 * raidNr))
 --    TemplateRaidlistFontString:SetFont("Fonts\\FRIZQT__.TTF", 9)
@@ -129,6 +150,26 @@ end
 -- ----------------------------------------------------------------------------
 
 function RaidTrackerUI_TestButton()
+  
+  --local myTabel = {13, 2, 48, 1, 54, 6, 48}
+  --for k, v in pairs(myTabel) do
+  --  pPrint("myTabel." .. k .. " = " .. v)
+  --end
+  --sort(myTabel)
+  --for k, v in pairs(myTabel) do
+  --  pPrint("myTabel." .. k .. " = " .. v)
+  --end
+  local sortTable = {}
+    for k, v in pairs(RaidAttendance) do
+    pPrint("RaidAttendance." .. k .. " = " .. v.date)
+    table.insert(sortTable, v.date)
+  end
+  table.sort(sortTable)
+pPrint("SortTable:")
+    for k, v in pairs(sortTable) do
+    pPrint("RaidAttendance." .. k .. " = " .. v)
+  end      
+  
   pPrint("Test button") 
 end
 
