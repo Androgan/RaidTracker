@@ -3,6 +3,7 @@
   <Script file="RaidTracker_GUI.lua"/>
   <Script file="RaidTracker_Recorder.lua"/>
   <Script file="RaidTracker_Sync.lua"/>
+  <Script file="RaidTracker_Stats.lua"/>
   
   <!-- RaidTracker Main Frame -->
   <Frame name="RaidTrackerFrame" hidden="true">
@@ -68,7 +69,7 @@
         </Scripts>
     	</Button>
       <!-- RaidTracker Subframe Raidlist -->
-      <Frame name="RaidTrackerGUI_RaidListSubframe" frameStrata="DIALOG" parent="RaidTrackerGUI" hidden="false" movable="true" enableMouse="true">
+      <Frame name="RaidTrackerGUI_RaidListSubframe" frameStrata="DIALOG" parent="RaidTrackerGUI" hidden="false">
         <Size><AbsDimension x="214" y="310"/></Size>
           <Anchors>
             <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
@@ -84,12 +85,28 @@
         </Backdrop>
       </Frame>
       <!-- RaidTracker Subframe Memberlist -->
-      <Frame name="RaidTrackerGUI_MemberListSubframe" frameStrata="DIALOG" parent="RaidTrackerGUI" hidden="false" movable="true" enableMouse="true">
+      <Frame name="RaidTrackerGUI_MemberListSubframe" frameStrata="DIALOG" parent="RaidTrackerGUI" hidden="false">
         <Size><AbsDimension x="400" y="310"/></Size>
           <Anchors>
             <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
               <Offset>
                 <AbsDimension x="240" y="-30"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+        <Backdrop edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+          <TileSize><AbsValue val="32"/></TileSize>
+          <EdgeSize><AbsValue val="8"/></EdgeSize>
+          <BackgroundInsets><AbsInset left="2" right="2" top="2" bottom="2"/></BackgroundInsets>
+        </Backdrop>
+      </Frame>
+      <!-- RaidTracker Subframe Stats -->
+      <Frame name="RaidTrackerGUI_StatsSubframe" frameStrata="DIALOG" parent="RaidTrackerGUI" hidden="true">
+        <Size><AbsDimension x="630" y="310"/></Size>
+          <Anchors>
+            <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+              <Offset>
+                <AbsDimension x="10" y="-30"/>
               </Offset>
             </Anchor>
           </Anchors>
@@ -123,8 +140,47 @@
         </Layer>
       </Layers>  
       </Frame>
+      <!-- RaidTracker stats panel button -->
+      <Frame name="RaidTrackerGUI_ChangeToStatsPanelButton" frameStrata="DIALOG" parent="RaidTrackerGUI" hidden="false" enableMouse="true">
+        <Size><AbsDimension x="60" y="20"/></Size>
+          <Anchors>
+            <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+              <Offset>
+                <AbsDimension x="10" y="-6"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+        <Scripts>
+          <OnMouseUp>
+            RaidTrackerGUI_MemberListSubframe:Hide()
+            RaidTrackerGUI_RaidListSubframe:Hide()
+            RaidTrackerGUI_TagDropDown:Hide()
+            RaidTrackerGUI_StatsSubframe:Show()
+            RaidTrackerUI_UpdateStats()
+          </OnMouseUp>
+        </Scripts>
+        <Backdrop edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+          <TileSize><AbsValue val="32"/></TileSize>
+          <EdgeSize><AbsValue val="8"/></EdgeSize>
+          <BackgroundInsets><AbsInset left="2" right="2" top="2" bottom="2"/></BackgroundInsets>
+        </Backdrop>
+        <Layers>
+          <Layer level="ARTWORK">
+            <FontString name="RaidTrackerCloseButton" outline="NORMAL" inherits="GameFontNormal" text="Stats" hidden="false">
+              <Anchors>
+                <Anchor point="CENTER" relativePoint="TOP">
+                  <Offset>
+                    <AbsDimension x="0" y="-9.5"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+              <Color r="1.0" g="1" b="1"/>
+            </FontString>
+          </Layer>
+        </Layers>
+      </Frame>
       <!-- RaidTracker X close button -->
-      <Frame name="RaidTrackerGUI_MemberListSubframe" frameStrata="DIALOG" parent="RaidTrackerGUI" hidden="false" movable="true" enableMouse="true">
+      <Frame name="RaidTrackerGUI_RaidTrackerWindowCloseButton" frameStrata="DIALOG" parent="RaidTrackerGUI" hidden="false" enableMouse="true">
         <Size><AbsDimension x="40" y="20"/></Size>
           <Anchors>
             <Anchor point="TOPLEFT" relativePoint="TOPLEFT">

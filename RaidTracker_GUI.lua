@@ -151,25 +151,6 @@ end
 
 function RaidTrackerUI_TestButton()
   
-  --local myTabel = {13, 2, 48, 1, 54, 6, 48}
-  --for k, v in pairs(myTabel) do
-  --  pPrint("myTabel." .. k .. " = " .. v)
-  --end
-  --sort(myTabel)
-  --for k, v in pairs(myTabel) do
-  --  pPrint("myTabel." .. k .. " = " .. v)
-  --end
-  local sortTable = {}
-    for k, v in pairs(RaidAttendance) do
-    pPrint("RaidAttendance." .. k .. " = " .. v.date)
-    table.insert(sortTable, v.date)
-  end
-  table.sort(sortTable)
-pPrint("SortTable:")
-    for k, v in pairs(sortTable) do
-    pPrint("RaidAttendance." .. k .. " = " .. v)
-  end      
-  
   pPrint("Test button") 
 end
 
