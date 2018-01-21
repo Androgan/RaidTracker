@@ -162,6 +162,14 @@ function RaidTrackerUI_ToggleRaidTrackerWindow()
   end
 end
 
+function RaidTrackerUI_HideAllTabs()
+    RaidTrackerGUI_MemberListSubframe:Hide()
+    RaidTrackerGUI_RaidListSubframe:Hide()
+    RaidTrackerGUI_TagDropDown:Hide()
+    RaidTrackerGUI_StatsSubframe:Hide()
+end
+
+
 function RaidTrackerGUI_Initialize()
   if RaidAttendance ~= nil then
     RaidTrackerUI_UpdateRaidlist()

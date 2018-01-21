@@ -87,8 +87,8 @@ function RaidTrackerUI_UpdateStats()
           TemplateAttendanceStatsFontString[entryNr]:SetJustifyH("LEFT")
           
           TemplateAttendanceStatsLeftFontString[entryNr] = RaidTrackerGUI_StatsSubframe:CreateFontString(nil, "OVERLAY")
-          TemplateAttendanceStatsLeftFontString[entryNr]:SetPoint("TOPLEFT", RaidTrackerGUI_StatsSubframe, "TOPLEFT", (3 + row * 125), (-4 - 16 * line))
-          TemplateAttendanceStatsLeftFontString[entryNr]:SetFont("Fonts\\FRIZQT__.TTF", 12, "OUTLINE")
+          TemplateAttendanceStatsLeftFontString[entryNr]:SetPoint("TOPLEFT", RaidTrackerGUI_StatsSubframe, "TOPLEFT", (3 + row * 125), (-6 - 16 * line))
+          TemplateAttendanceStatsLeftFontString[entryNr]:SetFont("Fonts\\FRIZQT__.TTF", 9, "OUTLINE")
           TemplateAttendanceStatsLeftFontString[entryNr]:SetWidth(120)
           TemplateAttendanceStatsLeftFontString[entryNr]:SetJustifyH("RIGHT")
           
