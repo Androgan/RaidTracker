@@ -126,7 +126,7 @@ function chatMsgAddonHandler(prefix, message, channel, sender)
 end
 
 function postVersion()
-  SendAddonMessage(addonPrefix .. "Version", me .. " - " .. getVersion())
+  SendAddonMessage(addonPrefix .. "Version", me .. " - " .. getVersion(), "RAID")
 end
 
 -- ----------------------------------------------------------------------------
@@ -212,9 +212,9 @@ function RaidTracker_Command(msg)
     end
   elseif(cmd == "check") then
     pPrint(me .. " - " .. getVersion());
-    SendAddonMessage(addonPrefix, "versioncheck")
+    SendAddonMessage(addonPrefix, "versioncheck", "RAID")
   elseif(cmd == "sync") then
-    SendAddonMessage(addonPrefix, "sync")
+    SendAddonMessage(addonPrefix, "sync", "RAID")
   else
     pPrint("Version " .. getVersion() .. " Usage:");
     pPrint("/rt gui - Opens up the RaidTracker Window.");

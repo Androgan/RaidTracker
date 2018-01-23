@@ -8,7 +8,7 @@ function postRecordedRaids()
       raidIDsAsMessage = raidIDsAsMessage .. "key:" .. k
       raidIDsAsMessage = raidIDsAsMessage .. "zone:" .. tbl.zone
       
-      SendAddonMessage(addonPrefix .. "raidIDs", raidIDsAsMessage .. "record_end")
+      SendAddonMessage(addonPrefix .. "raidIDs", raidIDsAsMessage .. "record_end", "RAID")
     end
   end
 end

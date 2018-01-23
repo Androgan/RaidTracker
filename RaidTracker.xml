@@ -230,7 +230,7 @@
           </Anchors>
         <Scripts>
           <OnMouseUp>
-            SendAddonMessage(addonPrefix, "sync")
+            SendAddonMessage(addonPrefix, "sync", "RAID")
           </OnMouseUp>
         </Scripts>
         <Backdrop edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
