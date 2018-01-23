@@ -112,7 +112,11 @@ function chatMsgAddonHandler(prefix, message, channel, sender)
     sendRequestedRaid(message, sender)
   elseif prefix == addonPrefix .. "part" .. me and
          sender ~= me then
-    pPrint("SYNC: gather parts" .. string.sub(message, string.find(message, "key:") + 4, string.find(message, "zone:") - 1))
+    if string.find(message, "key:") ~= nil then
+      pPrint("SYNC: gather parts" .. string.sub(message, string.find(message, "key:") + 4, string.find(message, "zone:") - 1))
+    else
+      pPrint("SYNC: gather parts")
+    end
     if raidParts.sender == nil then
       raidParts.sender = ""
     end
