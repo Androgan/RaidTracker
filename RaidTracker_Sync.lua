@@ -105,7 +105,8 @@ function saveRecievedRaid(record)
     class = string.sub(player, string.find(player, ";") + 1, string.len(player))
     player = string.sub(player, 1, string.find(player, ";") - 1)
     
-    raidMembers[player] = class
+    raidMembers[player] = {}
+    raidMembers[player].class = class
     
     if string.find(members, "member:" .. (numMember + 1)) ~= nil then
       members = string.sub(members,
@@ -120,7 +121,7 @@ function saveRecievedRaid(record)
   fullRaid["member"] = raidMembers
   
   RaidAttendance[tonumber(key)] = fullRaid
-  RaidTrackerUI_UpdateRaidList()
+  RaidTrackerUI_UpdateRaidlist()
 end
 
 function findNextMember(members, numNextMember)
