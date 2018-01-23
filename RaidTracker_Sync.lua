@@ -10,6 +10,7 @@ function postRecordedRaids()
       
       pPrint("SYNC: posting raid" .. k)
       SendAddonMessage(addonPrefix .. "raidID", raidIDAsMessage .. "record_end", "RAID")
+      raidIDAsMessage = ""
     end
   end
 end
@@ -23,6 +24,7 @@ function requestIfMissing(record, sender)
   
   for _, v in pairs(requestedRaids) do
     if v == record then
+      pPrint("SYNC: already requested" .. key)
       return
     end
   end
@@ -48,7 +50,7 @@ function sendRequestedRaid(record, sender)
   key = string.sub(record, string.find(record, "key:") + 4, string.find(record, "zone:") - 1)
   zone = string.sub(record, string.find(record, "zone:") + 5, string.find(record, "record_end") - 1)
   
-  recordAsMessage = "key:" .. key .. "zone:" .. zone .. "date:" .. RaidAttendance.key.date .. "tag:" .. RaidAttendance.key.tag
+  recordAsMessage = "key:" .. key .. "zone:" .. zone .. "date:" .. RaidAttendance[key].date .. "tag:" .. RaidAttendance[key].tag
   SendAddonMessage(addonPrefix .. "part" .. sender, "record" .. recordAsMessage, "RAID")
   recordAsMessage = ""
   

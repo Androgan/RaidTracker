@@ -104,7 +104,7 @@ function chatMsgAddonHandler(prefix, message, channel, sender)
     postRecordedRaids()
   elseif prefix == addonPrefix .. "raidID" and
          sender ~= me then
-    pPrint("SYNC: offered raids")
+    pPrint("SYNC: offered raids" .. message)
     requestIfMissing(message, sender)
   elseif prefix == addonPrefix .. "request" .. me and
          sender ~= me then
@@ -235,7 +235,7 @@ function registerEvents()
 end
 
 function pPrint(text)
-  SendChatMessage("RaidTracker: " .. text, "RAID")
+  -- SendChatMessage("RaidTracker: " .. text, "RAID")
   DEFAULT_CHAT_FRAME:AddMessage("RaidTracker: " .. text);
 end
 
