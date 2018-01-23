@@ -8,7 +8,6 @@ function postRecordedRaids()
       raidIDAsMessage = raidIDAsMessage .. "key:" .. k
       raidIDAsMessage = raidIDAsMessage .. "zone:" .. tbl.zone
       
-      pPrint("SYNC: posting raid" .. k)
       SendAddonMessage(addonPrefix .. "raidID", raidIDAsMessage .. "record_end", "RAID")
       raidIDAsMessage = ""
     end
@@ -17,14 +16,19 @@ end
 
 function requestIfMissing(record, sender)
   local key = ""
+  local savedKey = ""
+  local savedZone = ""
   local zone = ""
   
   key = string.sub(record, string.find(record, "key:") + 4, string.find(record, "zone:") - 1)
   zone = string.sub(record, string.find(record, "zone:") + 5, string.find(record, "record_end") - 1)
   
   for _, v in pairs(requestedRaids) do
-    if v == record then
-      pPrint("SYNC: already requested" .. key)
+    savedKey = string.sub(v, string.find(v, "key:") + 4, string.find(v, "zone:") - 1)
+    savedZone = string.sub(v, string.find(v, "zone:") + 5, string.find(v, "record_end") - 1)
+    if zone == savedZone and
+       ((savedKey - 21600) < tonumber(key)) and
+       ((savedKey + 21600) > tonumber(key)) then
       return
     end
   end
@@ -35,13 +39,11 @@ function requestIfMissing(record, sender)
     if ((k - 21600) < tonumber(key)) and
        ((k + 21600) > tonumber(key)) and
        tbl.zone == zone then
-      pPrint("SYNC: got raid " .. key)
       return
     end
   end
   
   table.insert(requestedRaids, record)
-  pPrint("SYNC: requesting " .. key)
   SendAddonMessage(addonPrefix .. "request" .. sender, record, "RAID")
 end
 
