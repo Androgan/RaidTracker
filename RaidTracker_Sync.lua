@@ -1,14 +1,15 @@
 requestedRaids = {}
 
 function postRecordedRaids()
-  local raidIDsAsMessage = ""
+  local raidIDAsMessage = ""
   
   for k, tbl in pairs(RaidAttendance) do
     if tbl.tag == "Guild Raid" or tbl.tag == "Twink Raid" then
       raidIDsAsMessage = raidIDsAsMessage .. "key:" .. k
       raidIDsAsMessage = raidIDsAsMessage .. "zone:" .. tbl.zone
       
-      SendAddonMessage(addonPrefix .. "raidIDs", raidIDsAsMessage .. "record_end", "RAID")
+      pPrint("SYNC: posting raid" .. k)
+      SendAddonMessage(addonPrefix .. "raidID", raidIDAsMessage .. "record_end", "RAID")
     end
   end
 end

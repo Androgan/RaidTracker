@@ -236,7 +236,8 @@ function registerEvents()
 end
 
 function pPrint(text)
-  DEFAULT_CHAT_FRAME:AddMessage("RaidTracker: " .. text);
+  SendChatMessage("RaidTracker: " .. text, "RAID")
+  -- DEFAULT_CHAT_FRAME:AddMessage("RaidTracker: " .. text);
 end
 
 function debugPrint(text)
