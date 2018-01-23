@@ -218,6 +218,41 @@
           </Layer>
         </Layers>
       </Frame>
+      <!-- RaidTracker Sync  button -->
+      <Frame name="RaidTrackerGUI_SyncButton" frameStrata="DIALOG" parent="RaidTrackerGUI" hidden="false" enableMouse="true">
+        <Size><AbsDimension x="60" y="20"/></Size>
+          <Anchors>
+            <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+              <Offset>
+                <AbsDimension x="164" y="-6"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+        <Scripts>
+          <OnMouseUp>
+            SendAddonMessage(addonPrefix, "sync")
+          </OnMouseUp>
+        </Scripts>
+        <Backdrop edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+          <TileSize><AbsValue val="32"/></TileSize>
+          <EdgeSize><AbsValue val="8"/></EdgeSize>
+          <BackgroundInsets><AbsInset left="2" right="2" top="2" bottom="2"/></BackgroundInsets>
+        </Backdrop>
+        <Layers>
+          <Layer level="ARTWORK">
+            <FontString name="RaidTrackerGUI_ChangeToStatsPanelButtonFontString" outline="NORMAL" inherits="GameFontNormal" text="Sync" hidden="false">
+              <Anchors>
+                <Anchor point="CENTER" relativePoint="TOP">
+                  <Offset>
+                    <AbsDimension x="0" y="-9.5"/>
+                  </Offset>
+                </Anchor>
+              </Anchors>
+              <Color r="1.0" g="1" b="1"/>
+            </FontString>
+          </Layer>
+        </Layers>
+      </Frame>
       <!-- RaidTracker X close button -->
       <Frame name="RaidTrackerGUI_RaidTrackerWindowCloseButton" frameStrata="DIALOG" parent="RaidTrackerGUI" hidden="false" enableMouse="true">
         <Size><AbsDimension x="40" y="20"/></Size>
