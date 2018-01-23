@@ -26,6 +26,7 @@ addonPrefix = "RaidTracker"
 me = UnitName("player")
 bDebug = true
 activeRaid = {}
+raidParts = {}
 
 -- ----------------------------------------------------------------------------
 -- Initializing Saved Variables
@@ -98,13 +99,29 @@ function chatMsgAddonHandler(prefix, message, channel, sender)
   
   -- syncing
   elseif prefix == addonPrefix and
-         message == "sync" and
-         sender ~= me then
+         message == "sync" then
     postRecordedRaids()
   elseif prefix == addonPrefix and
          string.sub(message, 1, 6) == "record" and
          sender ~= me then
     syncRecievedRaid(string.sub(message, 7))
+  elseif prefix == addonPrefix .. "raidID" and
+         string.sub(message, 1, 6) == "record" and
+         sender ~= me then
+    requestIfMissing(message, sender)
+  elseif prefix == addonPrefix .. "request" and
+         string.sub(message, 1, 6) == "record" and
+         sender ~= me then
+    sendRequestedRaid(message, sender)
+  elseif prefix == addonPrefix .. "part" and
+         sender ~= me then
+    if raidParts.sender == nil then
+      raidParts.sender = ""
+    end
+    raidParts.sender = raidParts.sender .. message
+    if string.find(message, "record_end") > 0 then
+      saveRecievedRaid(raidParts.sender)
+    end
   end
 end
 
