@@ -5,8 +5,8 @@ function postRecordedRaids()
   
   for k, tbl in pairs(RaidAttendance) do
     if tbl.tag == "Guild Raid" or tbl.tag == "Twink Raid" then
-      raidIDsAsMessage = raidIDsAsMessage .. "key:" .. k
-      raidIDsAsMessage = raidIDsAsMessage .. "zone:" .. tbl.zone
+      raidIDAsMessage = raidIDAsMessage .. "key:" .. k
+      raidIDAsMessage = raidIDAsMessage .. "zone:" .. tbl.zone
       
       pPrint("SYNC: posting raid" .. k)
       SendAddonMessage(addonPrefix .. "raidID", raidIDAsMessage .. "record_end", "RAID")
@@ -14,7 +14,7 @@ function postRecordedRaids()
   end
 end
 
-function requestIfMissing(msg, sender)
+function requestIfMissing(record, sender)
   local key = ""
   local zone = ""
   
@@ -22,19 +22,21 @@ function requestIfMissing(msg, sender)
   zone = string.sub(record, string.find(record, "zone:") + 5, string.find(record, "record_end") - 1)
   
   for _, v in pairs(requestedRaids) do
-    if v == msg then
+    if v == record then
       return
     end
   end
   
   for k, tbl in pairs(RaidAttendance) do
-    if ((k - 21600) < key) and ((k + 21600) > key) and tbl.zone == zone then
+    if ((k - 21600) < tonumber(key)) and ((k + 21600) > tonumber(key)) and tbl.zone == zone then
+      pPrint("SYNC: got raid " .. key)
       return
     end
   end
   
-  table.insert(requestedRaids, msg)
-  SendAddonMessage(addonPrefix .. "request", msg, "WHISPER", sender)
+  table.insert(requestedRaids, record)
+  pPrint("SYNC: requesting " .. key)
+  SendAddonMessage(addonPrefix .. "request" .. sender, record, "RAID")
 end
 
 function sendRequestedRaid(record, sender)
@@ -43,22 +45,22 @@ function sendRequestedRaid(record, sender)
   local key = ""
   local zone = ""
   
-  key = string.sub(recod, string.find(record, "key:") + 4, string.find(record, "zone:") - 1)
+  key = string.sub(record, string.find(record, "key:") + 4, string.find(record, "zone:") - 1)
   zone = string.sub(record, string.find(record, "zone:") + 5, string.find(record, "record_end") - 1)
   
   recordAsMessage = "key:" .. key .. "zone:" .. zone .. "date:" .. RaidAttendance.key.date .. "tag:" .. RaidAttendance.key.tag
-  SendAddonMessage(addonPrefix .. "part", "record" .. recordAsMessage, "WHISPER", sender)
+  SendAddonMessage(addonPrefix .. "part" .. sender, "record" .. recordAsMessage, "RAID")
   recordAsMessage = ""
   
   for member, class in pairs(tbl["member"]) do
     recordAsMessage = recordAsMessage .. "member:" .. numMember .. member .. ";" .. class
     numMember = numMember + 1
     if len(recordAsMessage) > 226 then
-      SendAddonMessage(addonPrefix .. "part",recordAsMessage, "WHISPER", sender)
+      SendAddonMessage(addonPrefix .. "part" .. sender, recordAsMessage, "RAID")
       recordAsMessage = ""
     end
   end
-  SendAddonMessage(addonPrefix .. "part",recordAsMessage .. "record_end", "WHISPER", sender)
+  SendAddonMessage(addonPrefix .. "part" .. sender, recordAsMessage .. "record_end", "RAID")
 end
 
 function saveRecievedRaid(record)

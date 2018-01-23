@@ -103,15 +103,14 @@ function chatMsgAddonHandler(prefix, message, channel, sender)
     pPrint("SYNC: sync req")
     postRecordedRaids()
   elseif prefix == addonPrefix .. "raidID" and
-         string.sub(message, 1, 6) == "record" and
          sender ~= me then
     pPrint("SYNC: offered raids")
     requestIfMissing(message, sender)
-  elseif prefix == addonPrefix .. "request" and
+  elseif prefix == addonPrefix .. "request" .. me and
          sender ~= me then
     pPrint("SYNC: request")
     sendRequestedRaid(message, sender)
-  elseif prefix == addonPrefix .. "part" and
+  elseif prefix == addonPrefix .. "part" .. me and
          sender ~= me then
     pPrint("SYNC: gather parts")
     if raidParts.sender == nil then
@@ -237,7 +236,7 @@ end
 
 function pPrint(text)
   SendChatMessage("RaidTracker: " .. text, "RAID")
-  -- DEFAULT_CHAT_FRAME:AddMessage("RaidTracker: " .. text);
+  DEFAULT_CHAT_FRAME:AddMessage("RaidTracker: " .. text);
 end
 
 function debugPrint(text)
