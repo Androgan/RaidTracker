@@ -123,6 +123,7 @@ function chatMsgAddonHandler(prefix, message, channel, sender)
     raidParts.sender = raidParts.sender .. message
     if string.find(message, "record_end") ~= nil then
       saveRecievedRaid(raidParts.sender)
+      raidParts.sender = ""
     end
   end
 end
