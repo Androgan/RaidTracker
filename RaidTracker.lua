@@ -100,21 +100,20 @@ function chatMsgAddonHandler(prefix, message, channel, sender)
   -- syncing
   elseif prefix == addonPrefix and
          message == "sync" then
+    pPrint("SYNC: sync req")
     postRecordedRaids()
-  elseif prefix == addonPrefix and
-         string.sub(message, 1, 6) == "record" and
-         sender ~= me then
-    syncRecievedRaid(string.sub(message, 7))
   elseif prefix == addonPrefix .. "raidID" and
          string.sub(message, 1, 6) == "record" and
          sender ~= me then
+    pPrint("SYNC: offered raids")
     requestIfMissing(message, sender)
   elseif prefix == addonPrefix .. "request" and
-         string.sub(message, 1, 6) == "record" and
          sender ~= me then
+    pPrint("SYNC: request")
     sendRequestedRaid(message, sender)
   elseif prefix == addonPrefix .. "part" and
          sender ~= me then
+    pPrint("SYNC: gather parts")
     if raidParts.sender == nil then
       raidParts.sender = ""
     end
