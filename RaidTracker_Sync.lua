@@ -90,7 +90,7 @@ function saveRecievedRaid(record)
   tag = string.sub(record, string.find(record, "tag:") + 4, string.find(record, "member:") - 1)
   
   fullRaid["zone"] = zone
-  fullRaid["date"] = datetime
+  fullRaid["date"] = tonumber(datetime)
   fullRaid["tag"] = tag
   
   members = string.sub(record, string.find(record, "member:"), string.find(record, "record_end") + 9)
@@ -119,7 +119,8 @@ function saveRecievedRaid(record)
   
   fullRaid["member"] = raidMembers
   
-  RaidAttendance.key = fullRaid
+  RaidAttendance[tonumber(key)] = fullRaid
+  RaidTrackerUI_UpdateRaidList()
 end
 
 function findNextMember(members, numNextMember)
