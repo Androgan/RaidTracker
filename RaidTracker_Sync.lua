@@ -29,8 +29,12 @@ function requestIfMissing(record, sender)
     end
   end
   
+  pPrint("SYNC: requestIfMissing " .. key)
+  
   for k, tbl in pairs(RaidAttendance) do
-    if ((k - 21600) < tonumber(key)) and ((k + 21600) > tonumber(key)) and tbl.zone == zone then
+    if ((k - 21600) < tonumber(key)) and
+       ((k + 21600) > tonumber(key)) and
+       tbl.zone == zone then
       pPrint("SYNC: got raid " .. key)
       return
     end
@@ -48,16 +52,18 @@ function sendRequestedRaid(record, sender)
   local zone = ""
   
   key = string.sub(record, string.find(record, "key:") + 4, string.find(record, "zone:") - 1)
+  key = tonumber(key)
   zone = string.sub(record, string.find(record, "zone:") + 5, string.find(record, "record_end") - 1)
   
-  recordAsMessage = "key:" .. key .. "zone:" .. zone .. "date:" .. RaidAttendance[key].date .. "tag:" .. RaidAttendance[key].tag
+  recordAsMessage = "key:" .. key .. "zone:" .. zone .. "date:" .. RaidAttendance[key].date ..
+                    "tag:" .. RaidAttendance[key].tag
   SendAddonMessage(addonPrefix .. "part" .. sender, "record" .. recordAsMessage, "RAID")
   recordAsMessage = ""
   
-  for member, class in pairs(tbl["member"]) do
-    recordAsMessage = recordAsMessage .. "member:" .. numMember .. member .. ";" .. class
+  for member, tbl in pairs(RaidAttendance[key].member) do
+    recordAsMessage = recordAsMessage .. "member:" .. numMember .. member .. ";" .. tbl.class
     numMember = numMember + 1
-    if len(recordAsMessage) > 226 then
+    if string.len(recordAsMessage) > 226 then
       SendAddonMessage(addonPrefix .. "part" .. sender, recordAsMessage, "RAID")
       recordAsMessage = ""
     end
@@ -96,7 +102,7 @@ function saveRecievedRaid(record)
                         string.find(members, "member:" .. numMember) + offset,
                         findNextMember(members, numMember + 1))
     
-    class = string.sub(player, string.find(player, ";") + 1, strlen(player))
+    class = string.sub(player, string.find(player, ";") + 1, string.len(player))
     player = string.sub(player, 1, string.find(player, ";") - 1)
     
     raidMembers[player] = class

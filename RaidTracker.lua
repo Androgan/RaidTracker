@@ -117,7 +117,7 @@ function chatMsgAddonHandler(prefix, message, channel, sender)
       raidParts.sender = ""
     end
     raidParts.sender = raidParts.sender .. message
-    if string.find(message, "record_end") > 0 then
+    if string.find(message, "record_end") ~= nil then
       saveRecievedRaid(raidParts.sender)
     end
   end
