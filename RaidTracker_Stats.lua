@@ -19,26 +19,32 @@ local TemplateAttendanceStatsLeftFontString = {}
 
 function RaidTrackerUI_UpdateStats()
 
+
   local entryNr = 0
   local line = 0
   local row = 0
   local maxAttendences = 0
   local attendanceStats = {}
+  local filterID = this:GetID()
 
-  for k, v in pairs(RaidAttendance) do
+
   
-    if (v.tag ~= "Guild Raid" and v.tag ~= "Twink Raid") then
-      break
-    end
+  for k, v in pairs(RaidAttendance) do
     
-    for l, w in pairs(RaidAttendance[k].member) do
-      if attendanceStats[l] == nil then 
-        attendanceStats[l] = {}
-        attendanceStats[l].count = 1
-        attendanceStats[l].class = RaidAttendance[k].member[l].class
-      else
-        attendanceStats[l].count = attendanceStats[l].count + 1
-      end      
+    if contains(filterList[filterID].filterTag, v.tag) then
+
+    if contains(filterList[filterID].filterZone, v.zone) then
+   
+        for l, w in pairs(RaidAttendance[k].member) do
+          if attendanceStats[l] == nil then 
+            attendanceStats[l] = {}
+            attendanceStats[l].count = 1
+            attendanceStats[l].class = RaidAttendance[k].member[l].class
+          else
+            attendanceStats[l].count = attendanceStats[l].count + 1
+          end      
+        end
+      end
     end
   end
 
@@ -53,7 +59,7 @@ function RaidTrackerUI_UpdateStats()
     for k, v in pairs(attendanceStats) do
       if v.count == i then
         local text = k
-        local pct = (math.floor(v.count / maxAttendences * 100) .. "%") --(v.count .. " - " .. math.floor(v.count / maxAttendences * 100) .. "%")
+        local pct = (math.floor(v.count / maxAttendences * 100) .. "% (" .. v.count .. ")") --(v.count .. " - " .. math.floor(v.count / maxAttendences * 100) .. "%")
  
         if line > 18 then
           line = 0
@@ -103,6 +109,8 @@ function RaidTrackerUI_UpdateStats()
         line = line + 1
       end
     end
+    RaidTrackerUI_HideAllTabs()
+    RaidTrackerGUI_StatsSubframe:Show()
   end
   
   
@@ -131,3 +139,11 @@ function RaidTrackerUI_UpdateStats()
   
 end
 
+function contains(t, value)
+    for _, v in pairs(t) do
+        if v == value then
+            return true
+        end
+    end
+    return false
+end
