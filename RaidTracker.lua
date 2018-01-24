@@ -45,10 +45,6 @@ function RaidTracker_OnLoad()
   registerEvents()
   registerSlashCommands()
   
-  if(RaidAttendance == nil) then
-    RaidAttendance = {}
-  end
-  
   pPrint("Version " .. getVersion() .. " loaded.")
 end
 
@@ -217,6 +213,7 @@ function RaidTracker_Command(msg)
 
   if(cmd == "gui") or (cmd == "") then
     RaidTrackerUI_ToggleRaidTrackerWindow();
+  
   elseif(cmd == "reset") then
     if not(deleteRecords) then
       deleteRecords = true
@@ -225,17 +222,28 @@ function RaidTracker_Command(msg)
       deleteRecords = false
       pPrint("No longer deleting records on next logout.");
     end
+  
   elseif(cmd == "check") then
     pPrint(me .. " - " .. getVersion());
     SendAddonMessage(addonPrefix, "versioncheck", "RAID")
+  
   elseif(cmd == "sync") then
     SendAddonMessage(addonPrefix, "sync", "RAID")
+  
+  elseif(cmd == "edittag") then
+    if currentlySelectedRaid ~= "" then
+      RaidTrackerGUI_TagDropDown:Show()
+    else
+      pPrint("Select a raid first")
+    end
+  
   else
     pPrint("Version " .. getVersion() .. " Usage:");
     pPrint("/rt gui - Opens up the RaidTracker Window.");
     pPrint("/rt reset - Set flag to delete records on logout.");
     pPrint("/rt check - Checks other addons Versions.");
     pPrint("/rt sync - Syncs other players Raids into own Raids.");
+    pPrint("/rt edittag - Alowes to edit tags of recorded raids");
   end
 end
 

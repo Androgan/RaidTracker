@@ -58,7 +58,10 @@ function RaidTrackerUI_SelectDate()
     RaidAttendance[currentlySelectedRaid].tag = ""
   end
   UIDropDownMenu_SetSelectedValue(RaidTrackerGUI_TagDropDown, RaidAttendance[currentlySelectedRaid].tag) --RaidAttendance[currentlySelectedRaid].tag);
-  RaidTrackerGUI_TagDropDown:Show()
+  --RaidTrackerGUI_TagDropDown:Show()
+  
+  RaidTrackerGUI_RaidlistTagFontstring:SetText(RaidAttendance[raidDate].tag)
+  RaidTrackerGUI_RaidlistCreatorFontstring:SetText("Creator: " .. RaidAttendance[raidDate].creator)
 end
 
 -- update list of all raids
@@ -167,6 +170,7 @@ function RaidTrackerUI_HideAllTabs()
     RaidTrackerGUI_RaidListSubframe:Hide()
     RaidTrackerGUI_TagDropDown:Hide()
     RaidTrackerGUI_StatsSubframe:Hide()
+    RaidTrackerGUI_FiltersSubframe:Hide()
 end
 
 
