@@ -16,6 +16,7 @@ function trackAttendance()
       activeRaid["date"] = time()
       activeRaid["member"] = {}
       activeRaid["tag"] = ""
+      activeRaid["creator"] = me
       
       RaidTrackerGUI_RaidTagPopup:Show()
     end
