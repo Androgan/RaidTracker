@@ -91,7 +91,7 @@ function saveRecievedRaid(record)
   zone = string.sub(record, string.find(record, "zone:") + 5, string.find(record, "date:") - 1)
   datetime = string.sub(record, string.find(record, "date:") + 5, string.find(record, "tag:") - 1)
   tag = string.sub(record, string.find(record, "tag:") + 4, string.find(record, "creator:") - 1)
-  creator = string.sub(record, string.find(record, "creator:") + 4, string.find(record, "member:") - 1)
+  creator = string.sub(record, string.find(record, "creator:") + 8, string.find(record, "member:") - 1)
   
   fullRaid["zone"] = zone
   fullRaid["date"] = tonumber(datetime)
