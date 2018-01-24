@@ -60,7 +60,7 @@ function RaidTrackerUI_SelectDate()
   UIDropDownMenu_SetSelectedValue(RaidTrackerGUI_TagDropDown, RaidAttendance[currentlySelectedRaid].tag) --RaidAttendance[currentlySelectedRaid].tag);
   --RaidTrackerGUI_TagDropDown:Show()
   
-  RaidTrackerGUI_RaidlistCreatorFontstring:Show()
+  RaidTrackerGUI_RaidlistTagFontstring:SetText(RaidAttendance[raidDate].tag)
   RaidTrackerGUI_RaidlistCreatorFontstring:SetText("Creator: " .. RaidAttendance[raidDate].creator)
 end
 

@@ -87,10 +87,16 @@
         <Layers>
           <Layer level="ARTWORK">
             <!-- Creator Fontstring -->         
-            <FontString name="RaidTrackerGUI_RaidlistCreatorFontstring" font="Fonts\FRIZQT__.TTF" inherits="GameFontNormal" text="" justifyH="RIGHT" hidden="false">
+            <FontString name="RaidTrackerGUI_RaidlistCreatorFontstring" font="Fonts\FRIZQT__.TTF" inherits="GameFontNormal" text="Creator: Androgan" justifyH="RIGHT" hidden="false">
               <Color r="1" g="1" b="1" a="1"/>
               <FontHeight val="8"/>
-              <Anchors><Anchor point="LEFT" relativePoint="TOP"><Offset><AbsDimension x="463" y="-303"/></Offset></Anchor></Anchors>
+              <Anchors><Anchor point="RIGHT" relativePoint="TOP"><Offset><AbsDimension x="520" y="-302"/></Offset></Anchor></Anchors>
+            </FontString>
+            <!-- Tag Fontstring -->         
+            <FontString name="RaidTrackerGUI_RaidlistTagFontstring" font="Fonts\FRIZQT__.TTF" inherits="GameFontNormal" text="Guild Raid" justifyH="RIGHT" hidden="false">
+              <Color r="1" g="1" b="1" a="1"/>
+              <FontHeight val="8"/>
+              <Anchors><Anchor point="RIGHT" relativePoint="TOP"><Offset><AbsDimension x="520" y="-292"/></Offset></Anchor></Anchors>
             </FontString>
           </Layer>
         </Layers>  
