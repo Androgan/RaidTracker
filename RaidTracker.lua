@@ -27,6 +27,7 @@ me = UnitName("player")
 bDebug = true
 activeRaid = {}
 raidParts = {}
+syncTag = ""
 
 -- ----------------------------------------------------------------------------
 -- Initializing Saved Variables
@@ -43,6 +44,10 @@ end
 function RaidTracker_OnLoad()
   registerEvents()
   registerSlashCommands()
+  
+  if(RaidAttendance == nil) then
+    RaidAttendance = {}
+  end
   
   pPrint("Version " .. getVersion() .. " loaded.")
 end
@@ -116,6 +121,21 @@ function chatMsgAddonHandler(prefix, message, channel, sender)
     if string.find(message, "record_end") ~= nil then
       saveRecievedRaid(raidParts.sender)
       raidParts.sender = ""
+    end
+  
+  -- tag sync
+  elseif prefix == addonPrefix .. "tagProvide" and
+         sender ~= me then
+    syncTag = message
+  elseif prefix == addonPrefix .. "tagRequest" and
+         sender ~= me then
+    if RaidAttendance[selectActiveRaid()] ~= nil then
+      SendAddonMessage(addonPrefix .. "tagResponse" .. sender, RaidAttendance[selectActiveRaid()].tag, "RAID")
+    end
+  elseif prefix == addonPrefix .. "tagResponse" .. me and
+       sender ~= me then
+    if syncTag == "" then
+      syncTag = message
     end
   end
 end
@@ -260,4 +280,30 @@ end
 
 function getVersion()
   return GetAddOnMetadata("RaidTracker", "Version")
+end
+
+local currDelay = 0
+local currFunc = nil
+local waitFrame = nil
+
+function raidTrackerWait(delay, func, ...)
+  if(waitFrame == nil) then
+    waitFrame = CreateFrame("Frame","WaitFrame", UIParent)
+  end
+  currDelay = delay
+  currFunc = func
+  waitFrame.TimeSinceLastUpdate = 0
+  waitFrame:SetScript("onUpdate", waitFunc)
+end
+
+function waitFunc(self,elapsed, ...)
+  waitFrame.TimeSinceLastUpdate = waitFrame.TimeSinceLastUpdate + arg1
+  
+  if waitFrame.TimeSinceLastUpdate > currDelay then
+    currFunc()
+    currDelay = 0
+    waitFrame.TimeSinceLastUpdate = 0
+    currFunc = nil
+    waitFrame:SetScript("onUpdate", nil)
+  end
 end

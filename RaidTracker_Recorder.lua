@@ -17,12 +17,9 @@ function trackAttendance()
       activeRaid["member"] = {}
       activeRaid["tag"] = ""
       activeRaid["creator"] = me
-      
-      RaidTrackerGUI_RaidTagPopup:Show()
     end
     
     numRaidMembers = GetNumRaidMembers()
-    pPrint(numRaidMembers)
     for x = 1, numRaidMembers, 1 do
       name, _, _, _, class = GetRaidRosterInfo(x)
       raidMembers[name] = {["class"] = class}
@@ -31,6 +28,14 @@ function trackAttendance()
     activeRaid["member"] = raidMembers
     
     RaidAttendance[activeRaid.date] = activeRaid
+    
+    if syncTag ~= "" then
+      setSyncMsgTag()
+    else
+      SendAddonMessage(addonPrefix .. "tagRequest", "", "RAID")
+      raidTrackerWait(2, handleTagResponse)
+    end
+    
     RaidTrackerUI_UpdateRaidlist()
   end
 end
@@ -58,7 +63,23 @@ end
 function RaidTracker_PopupAddTag()
   UIDropDownMenu_SetSelectedValue(RaidTrackerGUI_PopupTagDropDown, this.value)
   RaidAttendance[selectActiveRaid()].tag = this.value
+  SendAddonMessage(addonPrefix .. "tagProvide", this.value, "RAID")
 end
+
+function setSyncMsgTag()
+  UIDropDownMenu_SetSelectedValue(RaidTrackerGUI_PopupTagDropDown, syncTag)
+  RaidAttendance[selectActiveRaid()].tag = syncTag
+  syncTag = ""
+end
+
+function handleTagResponse()
+  if syncTag ~= "" then
+    setSyncMsgTag()
+  else
+    RaidTrackerGUI_RaidTagPopup:Show()
+  end
+end
+
 -- ----------------------------------------------------------------------------
 -- Helpers
 -- ----------------------------------------------------------------------------
