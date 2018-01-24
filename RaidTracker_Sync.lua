@@ -58,7 +58,7 @@ function sendRequestedRaid(record, sender)
   zone = string.sub(record, string.find(record, "zone:") + 5, string.find(record, "record_end") - 1)
   
   recordAsMessage = "key:" .. key .. "zone:" .. zone .. "date:" .. RaidAttendance[key].date ..
-                    "tag:" .. RaidAttendance[key].tag
+                    "tag:" .. RaidAttendance[key].tag .. "creator:" .. RaidAttendance[key].creator
   SendAddonMessage(addonPrefix .. "part" .. sender, "record" .. recordAsMessage, "RAID")
   recordAsMessage = ""
   
@@ -79,6 +79,7 @@ function saveRecievedRaid(record)
   local zone = ""
   local datetime = ""
   local tag = ""
+  local creator = ""
   local members = ""
   local player = ""
   local class = ""
@@ -89,11 +90,13 @@ function saveRecievedRaid(record)
   key = string.sub(record, string.find(record, "key:") + 4, string.find(record, "zone:") - 1)
   zone = string.sub(record, string.find(record, "zone:") + 5, string.find(record, "date:") - 1)
   datetime = string.sub(record, string.find(record, "date:") + 5, string.find(record, "tag:") - 1)
-  tag = string.sub(record, string.find(record, "tag:") + 4, string.find(record, "member:") - 1)
+  tag = string.sub(record, string.find(record, "tag:") + 4, string.find(record, "creator:") - 1)
+  creator = string.sub(record, string.find(record, "creator:") + 4, string.find(record, "member:") - 1)
   
   fullRaid["zone"] = zone
   fullRaid["date"] = tonumber(datetime)
   fullRaid["tag"] = tag
+  fullRaid["creator"] = creator
   
   members = string.sub(record, string.find(record, "member:"), string.find(record, "record_end") + 9)
   
