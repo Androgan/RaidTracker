@@ -12,7 +12,7 @@ trackedZones = {"The Molten Core",
                 "Blackwing Lair",
                 "Zul'Gurub",
                 "Ruins of Ahn'Qiraj",
-                "The Temple of Ahn'Qiraj",
+                "Ahn'Qiraj",
                 "Naxxramas"}
 raidTags =       {"Guild Raid",
                   "Twink Raid",
