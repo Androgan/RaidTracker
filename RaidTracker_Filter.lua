@@ -21,9 +21,9 @@ filterList = {
     },
   },
   [2] = {
-    ["filterName"] = "Ruins of Ahn'Qiraj\nGuildRaid",
+    ["filterName"] = "Ahn'Qiraj\nGuildRaid",
     ["filterZone"] = {
-      "Ruins of Ahn'Qiraj",
+      "Ahn'Qiraj",
     },
     ["filterTag"] = {
       "Guild Raid"
@@ -48,6 +48,25 @@ filterList = {
     },
   },
   [5] = {
+    ["filterName"] = "Ahn'Qiraj + Blackwing Lair\nGuildRaid",
+    ["filterZone"] = {
+      "Ruins of Ahn'Qiraj",      
+      "Blackwing Lair",
+    },
+    ["filterTag"] = {
+      "Guild Raid"
+    },
+  },
+  [6] = {
+    ["filterName"] = "Ruins of Ahn'Qiraj\nGuildRaid",
+    ["filterZone"] = {
+      "Ruins of Ahn'Qiraj",
+    },
+    ["filterTag"] = {
+      "Guild Raid"
+    },
+  },
+  [7] = {
     ["filterName"] = "Zul'Gurub\nGuildRaid",
     ["filterZone"] = {
       "Zul'Gurub",

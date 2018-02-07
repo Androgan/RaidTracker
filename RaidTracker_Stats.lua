@@ -103,7 +103,7 @@ function RaidTrackerUI_UpdateStats()
         TemplateAttendanceStatsLeftFontString[entryNr]:SetText(pct)
         TemplateAttendanceStatsFontString[entryNr]:SetTextColor(RaidTrackerGUI_GetClassClolor(v.class))
         TemplateAttendanceStatsFrame[entryNr]:SetWidth(120 * v.count / maxAttendences)
-        TemplateAttendanceStatsLeftFrame[entryNr]:SetWidth(120 * (1 - v.count / maxAttendences))
+        TemplateAttendanceStatsLeftFrame[entryNr]:SetWidth(0.1 + 119.9 * (1 - v.count / maxAttendences))
         
         entryNr = entryNr + 1
         line = line + 1
