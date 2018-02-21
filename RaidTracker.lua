@@ -130,9 +130,7 @@ function chatMsgAddonHandler(prefix, message, channel, sender)
     end
   elseif prefix == addonPrefix .. "tagResponse" .. me and
        sender ~= me then
-    if syncTag == "" then
-      syncTag = message
-    end
+    syncTag = message
   end
 end
 

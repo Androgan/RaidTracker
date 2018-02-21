@@ -69,7 +69,6 @@ end
 function setSyncMsgTag()
   UIDropDownMenu_SetSelectedValue(RaidTrackerGUI_PopupTagDropDown, syncTag)
   RaidAttendance[selectActiveRaid()].tag = syncTag
-  syncTag = ""
 end
 
 function handleTagResponse()
