@@ -4,17 +4,25 @@
 local FilterFrame = {}
 local filtersCreated = false
 
+TheMoltenCore = 409
+OnyxiasLair = 249
+BlackwingLair = 469
+ZulGurub = 309
+RuinsOfAhnQiraj = 509
+TempleOfAhnQiraj = 531
+Naxxramas = 533
+
 filterList = {
   [1] = {
     ["filterName"] = "All Raids\nGuildRaids",
     ["filterZone"] = {
-      "The Molten Core",
-      "Onyxia's Lair",
-      "Blackwing Lair",
-      "Zul'Gurub",
-      "Ruins of Ahn'Qiraj",
-      "The Temple of Ahn'Qiraj",
-      "Naxxramas",
+      TheMoltenCore,
+      OnyxiasLair,
+      BlackwingLair,
+      ZulGurub,
+      RuinsOfAhnQiraj,
+      TempleOfAhnQiraj,
+      Naxxramas,
     },
     ["filterTag"] = {
       "Guild Raid"
@@ -23,7 +31,7 @@ filterList = {
   [2] = {
     ["filterName"] = "The Molten Core\nGuildRaid",
     ["filterZone"] = {
-      "The Molte Core",
+      TheMoltenCore,
     },
     ["filterTag"] = {
       "Guild Raid"
@@ -32,7 +40,7 @@ filterList = {
   [3] = {
     ["filterName"] = "Blackwing Lair\nGuildRaid",
     ["filterZone"] = {
-      "Blackwing Lair",
+      BlackwingLair,
     },
     ["filterTag"] = {
       "Guild Raid"
@@ -41,35 +49,53 @@ filterList = {
   [4] = {
     ["filterName"] = "Ahn'Qiraj\nGuildRaid",
     ["filterZone"] = {
-      "Ahn'Qiraj",
+      TempleOfAhnQiraj,
     },
     ["filterTag"] = {
       "Guild Raid"
     },
   },
   [5] = {
-    ["filterName"] = "Blackwing Lair + Ahn'Qiraj\nGuildRaid",
+    ["filterName"] = "Onyxia's Lair\nGuildRaid",
     ["filterZone"] = {
-      "Blackwing Lair",
-      "Ahn'Qiraj",
+      OnyxiasLair,
     },
     ["filterTag"] = {
       "Guild Raid"
     },
   },
   [6] = {
-    ["filterName"] = "Ruins of Ahn'Qiraj\nGuildRaid",
+    ["filterName"] = "Blackwing Lair + Ahn'Qiraj\nGuildRaid",
     ["filterZone"] = {
-      "Ruins of Ahn'Qiraj",
+      BlackwingLair,
+      TempleOfAhnQiraj,
     },
     ["filterTag"] = {
       "Guild Raid"
     },
   },
   [7] = {
+    ["filterName"] = "Ruins of Ahn'Qiraj\nGuildRaid",
+    ["filterZone"] = {
+      RuinsOfAhnQiraj,
+    },
+    ["filterTag"] = {
+      "Guild Raid"
+    },
+  },
+  [8] = {
     ["filterName"] = "Zul'Gurub\nGuildRaid",
     ["filterZone"] = {
-      "Zul'Gurub",
+      ZulGurub,
+    },
+    ["filterTag"] = {
+      "Guild Raid"
+    },
+  },
+  [9] = {
+    ["filterName"] = "Naxxramas\nGuildRaid",
+    ["filterZone"] = {
+      Naxxramas,
     },
     ["filterTag"] = {
       "Guild Raid"

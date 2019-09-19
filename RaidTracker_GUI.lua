@@ -13,7 +13,7 @@ function RaidTrackerUI_SelectDate(self)
   local line = 0
   local row = 0
   local fontStringListLength = 0
-  local sortTable = {Druide = {}, Jaeger = {}, Magier = {}, Paladin = {}, Priester = {}, Schurke = {}, Schamane = {}, Hexenmeister = {}, Krieger = {}}
+  local sortTable = {DRUID = {}, HUNTER = {}, MAGE = {}, PALADIN = {}, PRIEST = {}, ROGUE = {}, SHAMAN = {}, WARLOCK = {}, WARRIOR = {}}
   
   raidDate = self:GetID()
   currentlySelectedRaid = raidDate
@@ -79,7 +79,7 @@ function RaidTrackerUI_UpdateRaidlist()
   
   --for k, v in pairs(RaidAttendance) do
   for k, v in pairs(sortTable) do
-    local line = date("%a %d.%m.%y", v) .. " - " .. RaidAttendance[v].zone
+    local line = date("%a %d.%m.%y", v) .. " - " .. getZoneNameByID(RaidAttendance[v].zone)
 	local fontString
     
     -- align text to left
@@ -184,23 +184,23 @@ function RaidTrackerGUI_Initialize()
 end
 
 function RaidTrackerGUI_GetClassClolor(class)
-  if class == "Warlock"  then
+  if class == "WARLOCK"  then
     return 0.58, 0.51, 0.79,1
-  elseif class == "Druid"  then
+  elseif class == "DRUID"  then
     return 1.00, 0.49, 0.04,1
-  elseif class == "Rogue"  then
+  elseif class == "ROGUE"  then
     return 1.00, 0.96, 0.41,1
-  elseif class == "Hunter"  then
+  elseif class == "HUNTER"  then
     return 0.67, 0.83, 0.45,1
-  elseif class == "Mage"  then
+  elseif class == "MAGE"  then
     return 0.41, 0.80, 0.94,1
-  elseif class == "Shaman"  then
+  elseif class == "SHAMAN"  then
     return 0.00, 0.44, 0.87,1
-  elseif class == "Priest"  then
+  elseif class == "PRIEST"  then
     return 1.00, 1.00, 1.00,1
-  elseif class == "Paladin"  then
+  elseif class == "PALADIN"  then
     return 0.96, 0.55, 0.73,1
-  elseif class == "Warrior"  then
+  elseif class == "WARRIOR"  then
     return 0.78, 0.61, 0.43,1
   else
     return 1.00, 1.00, 1.00,1

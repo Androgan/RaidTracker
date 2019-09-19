@@ -7,18 +7,31 @@
 -- ----------------------------------------------------------------------------
 
 -- trackedZones = {"Ironforge", "City of Ironforge", "Stormwind Stockade"}
-trackedZones = {"The Molten Core",
-                "Onyxia's Lair",
-                "Blackwing Lair",
-                "Zul'Gurub",
-                "Ruins of Ahn'Qiraj",
-                "Ahn'Qiraj",
-                "Naxxramas"}
-raidTags =       {"Guild Raid",
-                  "Twink Raid",
-                  "Pug Raid",
-                  "Private Raid",
-                  ""}
+
+-- See https://wow.gamepedia.com/InstanceID/Complete_list for the IDs
+
+TheMoltenCore = 409
+OnyxiasLair = 249
+BlackwingLair = 469
+ZulGurub = 309
+RuinsOfAhnQiraj = 509
+TempleOfAhnQiraj = 531
+Naxxramas = 533
+
+trackedZones = {TheMoltenCore,
+                OnyxiasLair,
+                BlackwingLair,
+                ZulGurub,
+                RuinsOfAhnQiraj,
+                TempleOfAhnQiraj,
+                Naxxramas
+}
+raidTags =     {"Guild Raid",
+                "Twink Raid",
+                "Pug Raid",
+                "Private Raid",
+                ""
+}
 
 numRaidMembers = 0
 deleteRecords = false
@@ -52,7 +65,6 @@ function RaidTracker_OnEvent(event, ...)
   local arg1, arg2, arg3, arg4 = ...
   
   if(event == "ZONE_CHANGED_NEW_AREA") then
-	  debugPrint(GetRealZoneText())
     trackAttendance()
   end
   
@@ -284,6 +296,17 @@ function printTableVals(tbl)
       printTableKeys(v)
     end
   end
+end
+
+function getInstanceID()
+  local id = 0
+  _,_,_,_,_,_,_,id = GetInstanceInfo()
+  
+  return id
+end
+
+function getZoneNameByID(id)
+  return tostring(GetRealZoneText(tonumber(id)))
 end
 
 function getVersion()

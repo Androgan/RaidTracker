@@ -12,7 +12,7 @@ function trackAttendance()
     
     if activeRaid == nil then
       activeRaid = {}
-      activeRaid["zone"] = GetRealZoneText()
+      activeRaid["zone"] = getInstanceID()
       activeRaid["date"] = time()
       activeRaid["member"] = {}
       activeRaid["tag"] = ""
@@ -21,7 +21,8 @@ function trackAttendance()
     
     numRaidMembers = GetNumGroupMembers()
     for x = 1, numRaidMembers, 1 do
-      name, _, _, _, class = GetRaidRosterInfo(x)
+      name = GetRaidRosterInfo(x)
+      _, class = UnitClass(name)
       raidMembers[name] = {["class"] = class}
     end
     
@@ -43,7 +44,7 @@ end
 function selectActiveRaid()
   for k, tbl in pairs(RaidAttendance) do
     if (k > (time() - 43200)) and
-       (tbl["zone"] == GetRealZoneText()) then
+       (tbl["zone"] == getInstanceID()) then
       debugPrint("found previous raid" .. k)
       return k
     end
@@ -86,7 +87,7 @@ end
 function checkTracking()
   local track = false
   
-  track = searchInTable(GetZoneText(), trackedZones);
+  track = searchInTable(getInstanceID(), trackedZones);
   track = track and (GetNumGroupMembers() > 0);
   
   return track
