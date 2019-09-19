@@ -41,15 +41,18 @@ end
 -- Event Handling
 -- ----------------------------------------------------------------------------
 
-function RaidTracker_OnLoad()
-  registerEvents()
+function RaidTracker_OnLoad(self)
+  registerEvents(self)
   registerSlashCommands()
   
   pPrint("Version " .. getVersion() .. " loaded.")
 end
 
-function RaidTracker_OnEvent(event)
+function RaidTracker_OnEvent(event, ...)
+  local arg1, arg2, arg3, arg4 = ...
+  
   if(event == "ZONE_CHANGED_NEW_AREA") then
+	  debugPrint(GetRealZoneText())
     trackAttendance()
   end
   
@@ -77,7 +80,7 @@ function rosterUpdateHandler()
 end
 
 function didPlayerEnter()
-  return numRaidMembers < GetNumRaidMembers()
+  return numRaidMembers < GetNumGroupMembers()
 end
 
 function logoutHandler()
@@ -120,13 +123,12 @@ function chatMsgAddonHandler(prefix, message, channel, sender)
     end
   
   -- tag sync
-  elseif prefix == addonPrefix .. "tagProvide" and
-         sender ~= me then
+  elseif prefix == addonPrefix .. "tagProvide" then
     syncTag = message
   elseif prefix == addonPrefix .. "tagRequest" and
          sender ~= me then
     if RaidAttendance[selectActiveRaid()] ~= nil then
-      SendAddonMessage(addonPrefix .. "tagResponse" .. sender, RaidAttendance[selectActiveRaid()].tag, "RAID")
+      C_ChatInfo.SendAddonMessage(addonPrefix .. "tagResponse" .. sender, RaidAttendance[selectActiveRaid()].tag, "RAID")
     end
   elseif prefix == addonPrefix .. "tagResponse" .. me and
        sender ~= me then
@@ -135,7 +137,7 @@ function chatMsgAddonHandler(prefix, message, channel, sender)
 end
 
 function postVersion()
-  SendAddonMessage(addonPrefix .. "Version", me .. " - " .. getVersion(), "RAID")
+  C_ChatInfo.SendAddonMessage(addonPrefix .. "Version", me .. " - " .. getVersion(), "RAID")
 end
 
 -- ----------------------------------------------------------------------------
@@ -223,10 +225,10 @@ function RaidTracker_Command(msg)
   
   elseif(cmd == "check") then
     pPrint(me .. " - " .. getVersion());
-    SendAddonMessage(addonPrefix, "versioncheck", "RAID")
+    C_ChatInfo.SendAddonMessage(addonPrefix, "versioncheck", "RAID")
   
   elseif(cmd == "sync") then
-    SendAddonMessage(addonPrefix, "sync", "RAID")
+    C_ChatInfo.SendAddonMessage(addonPrefix, "sync", "RAID")
   
   elseif(cmd == "edittag") then
     if currentlySelectedRaid ~= "" then
@@ -249,17 +251,17 @@ end
 -- Utility Functions
 -- ----------------------------------------------------------------------------
 
-function registerEvents()
-  this:RegisterEvent("ZONE_CHANGED_NEW_AREA");
-  this:RegisterEvent("RAID_ROSTER_UPDATE");
-  this:RegisterEvent("PLAYER_LOGOUT");
-  this:RegisterEvent("ADDON_LOADED");
-  this:RegisterEvent("CHAT_MSG_ADDON");
+function registerEvents(self)
+  self:RegisterEvent("ZONE_CHANGED_NEW_AREA");
+  self:RegisterEvent("RAID_ROSTER_UPDATE");
+  self:RegisterEvent("PLAYER_LOGOUT");
+  self:RegisterEvent("ADDON_LOADED");
+  self:RegisterEvent("CHAT_MSG_ADDON");
 end
 
-function pPrint(text)
+function pPrint(val)
   -- SendChatMessage("RaidTracker: " .. text, "RAID")
-  DEFAULT_CHAT_FRAME:AddMessage("RaidTracker: " .. text);
+  DEFAULT_CHAT_FRAME:AddMessage("RaidTracker: " .. tostring(val));
 end
 
 function debugPrint(text)
@@ -292,7 +294,7 @@ local currDelay = 0
 local currFunc = nil
 local waitFrame = nil
 
-function raidTrackerWait(delay, func, ...)
+function raidTrackerWait(delay, func)
   if(waitFrame == nil) then
     waitFrame = CreateFrame("Frame","WaitFrame", UIParent)
   end
@@ -302,8 +304,8 @@ function raidTrackerWait(delay, func, ...)
   waitFrame:SetScript("onUpdate", waitFunc)
 end
 
-function waitFunc(self,elapsed, ...)
-  waitFrame.TimeSinceLastUpdate = waitFrame.TimeSinceLastUpdate + arg1
+function waitFunc(self, elapsed)
+  waitFrame.TimeSinceLastUpdate = waitFrame.TimeSinceLastUpdate + 1
   
   if waitFrame.TimeSinceLastUpdate > currDelay then
     currFunc()

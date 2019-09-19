@@ -8,33 +8,17 @@ local TemplateAttendanceStatsLeftFrame = {}
 local TemplateAttendanceStatsLeftFontString = {}
 
 
-
-
-
-
-
-
-
-
-
-function RaidTrackerUI_UpdateStats()
-
-
+function RaidTrackerUI_UpdateStats(self)
   local entryNr = 0
   local line = 0
   local row = 0
   local maxAttendences = 0
   local attendanceStats = {}
-  local filterID = this:GetID()
-
-
+  local filterID = self:GetID()
   
   for k, v in pairs(RaidAttendance) do
-    
     if contains(filterList[filterID].filterTag, v.tag) then
-
-    if contains(filterList[filterID].filterZone, v.zone) then
-   
+      if contains(filterList[filterID].filterZone, v.zone) then
         for l, w in pairs(RaidAttendance[k].member) do
           if attendanceStats[l] == nil then 
             attendanceStats[l] = {}
@@ -54,8 +38,7 @@ function RaidTrackerUI_UpdateStats()
     end
   end
   
-  for i = maxAttendences, 1, -1 do
-      
+  for i = maxAttendences, 1, -1 do 
     for k, v in pairs(attendanceStats) do
       if v.count == i then
         local text = k

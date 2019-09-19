@@ -19,7 +19,7 @@ function trackAttendance()
       activeRaid["creator"] = me
     end
     
-    numRaidMembers = GetNumRaidMembers()
+    numRaidMembers = GetNumGroupMembers()
     for x = 1, numRaidMembers, 1 do
       name, _, _, _, class = GetRaidRosterInfo(x)
       raidMembers[name] = {["class"] = class}
@@ -32,8 +32,8 @@ function trackAttendance()
     if syncTag ~= "" then
       setSyncMsgTag()
     else
-      SendAddonMessage(addonPrefix .. "tagRequest", "", "RAID")
-      raidTrackerWait(2, handleTagResponse)
+      C_ChatInfo.SendAddonMessage(addonPrefix .. "tagRequest", "", "RAID")
+      raidTrackerWait(20, handleTagResponse)
     end
     
     RaidTrackerUI_UpdateRaidlist()
@@ -53,17 +53,17 @@ function selectActiveRaid()
   return time()
 end
 
-function RaidTracker_AddTag()
+function RaidTracker_AddTag(self)
   if currentlySelectedRaid ~= "" then
-    UIDropDownMenu_SetSelectedValue(RaidTrackerGUI_TagDropDown, this.value) 
-    RaidAttendance[currentlySelectedRaid].tag = this.value
+    UIDropDownMenu_SetSelectedValue(RaidTrackerGUI_TagDropDown, self.value) 
+    RaidAttendance[currentlySelectedRaid].tag = self.value
   end
 end
 
-function RaidTracker_PopupAddTag()
-  UIDropDownMenu_SetSelectedValue(RaidTrackerGUI_PopupTagDropDown, this.value)
-  RaidAttendance[selectActiveRaid()].tag = this.value
-  SendAddonMessage(addonPrefix .. "tagProvide", this.value, "RAID")
+function RaidTracker_PopupAddTag(self)
+  UIDropDownMenu_SetSelectedValue(RaidTrackerGUI_PopupTagDropDown, self.value)
+  RaidAttendance[selectActiveRaid()].tag = self.value
+  C_ChatInfo.SendAddonMessage(addonPrefix .. "tagProvide", self.value, "RAID")
 end
 
 function setSyncMsgTag()
@@ -87,7 +87,7 @@ function checkTracking()
   local track = false
   
   track = searchInTable(GetZoneText(), trackedZones);
-  track = track and (GetNumRaidMembers() > 0);
+  track = track and (GetNumGroupMembers() > 0);
   
   return track
 end
