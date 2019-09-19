@@ -1,4 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+
   <Script file="RaidTracker.lua"/>
   <Script file="RaidTracker_GUI.lua"/>
   <Script file="RaidTracker_Recorder.lua"/>
@@ -10,10 +11,10 @@
   <Frame name="RaidTrackerFrame" hidden="true">
     <Scripts>
       <OnLoad>
-        RaidTracker_OnLoad();
+        RaidTracker_OnLoad(self);
       </OnLoad>
       <OnEvent>
-        RaidTracker_OnEvent(event);
+        RaidTracker_OnEvent(event, ...);
       </OnEvent>
     </Scripts>
   </Frame>
@@ -24,14 +25,14 @@
     <Anchors> <Anchor point="CENTER" /></Anchors>
     <Scripts>
       <OnLoad>
-        this:RegisterForDrag("LeftButton");
+        self:RegisterForDrag("LeftButton");
         RaidTrackerUI_UpdateRaidlist();
       </OnLoad>
       <OnDragStart>
-        this:StartMoving();
+        self:StartMoving();
       </OnDragStart>
       <OnDragStop>
-        this:StopMovingOrSizing();
+        self:StopMovingOrSizing();
       </OnDragStop>
     </Scripts>
     <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
@@ -64,7 +65,7 @@
         <Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="400" y="-3.5"/></Offset></Anchor></Anchors> 
         <Scripts>
           <OnShow>
-            UIDropDownMenu_Initialize(this,RaidTrackerGUI_TagDropDown_Fill);
+            UIDropDownMenu_Initialize(self,RaidTrackerGUI_TagDropDown_Fill);
             UIDropDownMenu_SetSelectedValue(RaidTrackerGUI_TagDropDown, RaidAttendance[currentlySelectedRaid].tag)
           </OnShow>
         </Scripts>
@@ -189,7 +190,7 @@
             RaidTrackerGUI_MemberListSubframe:Show()
             RaidTrackerGUI_RaidListSubframe:Show()
             RaidTrackerGUI_ChangeToStatsPanelButton:Show()
-            this:Hide()
+            self:Hide()
           </OnMouseUp>
         </Scripts>
         <Backdrop edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
@@ -226,9 +227,9 @@
           <OnMouseUp>
             RaidTrackerUI_HideAllTabs()
             RaidTrackerGUI_FiltersSubframe:Show()
-            RaidTrackerUI_CreateFilters()
+            RaidTrackerUI_CreateFilters(self)
             RaidTrackerGUI_ChangeToRaidListPanelButton:Show()
-            this:Hide()
+            self:Hide()
           </OnMouseUp>
         </Scripts>
         <Backdrop edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
@@ -263,7 +264,7 @@
           </Anchors>
         <Scripts>
           <OnMouseUp>
-            SendAddonMessage(addonPrefix, "sync", "RAID")
+            C_ChatInfo.SendAddonMessage(addonPrefix, "sync", "RAID")
           </OnMouseUp>
         </Scripts>
         <Backdrop edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
@@ -379,7 +380,7 @@
         <Anchors><Anchor point="Top"><Offset><AbsDimension x="0" y="-30"/></Offset></Anchor></Anchors> 
         <Scripts>
           <OnShow>
-            UIDropDownMenu_Initialize(this,RaidTrackerGUI_PopupTagDropDown_Fill);
+            UIDropDownMenu_Initialize(self,RaidTrackerGUI_PopupTagDropDown_Fill);
           </OnShow>
         </Scripts>
     	</Button>
@@ -429,14 +430,14 @@
     <Anchors> <Anchor point="CENTER" /></Anchors>
     <Scripts>	
       <OnLoad>
-        this:RegisterForDrag("LeftButton");
+        self:RegisterForDrag("LeftButton");
       </OnLoad>
       <OnDragStart>
-        this:StartMoving();
+        self:StartMoving();
       </OnDragStart>
       <OnDragStop>
-        this:StopMovingOrSizing();
-        RaidTrackerUI_UpdateRelativePosition(this, this:GetParent(), "RaidTrackerPositionProbeString");
+        self:StopMovingOrSizing();
+        RaidTrackerUI_UpdateRelativePosition(self, self:GetParent(), "RaidTrackerPositionProbeString");
       </OnDragStop>
     </Scripts>
     <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">

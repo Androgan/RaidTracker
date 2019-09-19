@@ -1,6 +1,6 @@
-## Interface: 11200
+## Interface: 11302
 ## Title: RaidTracker
-## Version: 0.0.1
+## Version: 1.0
 ## Notes: Raid Attendance Tracker For VanillaWoW
 ## SavedVariablesPerCharacter: RaidAttendance
 RaidTracker.xml

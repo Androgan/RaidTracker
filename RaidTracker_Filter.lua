@@ -21,9 +21,9 @@ filterList = {
     },
   },
   [2] = {
-    ["filterName"] = "Ahn'Qiraj\nGuildRaid",
+    ["filterName"] = "The Molten Core\nGuildRaid",
     ["filterZone"] = {
-      "Ahn'Qiraj",
+      "The Molte Core",
     },
     ["filterTag"] = {
       "Guild Raid"
@@ -39,19 +39,19 @@ filterList = {
     },
   },
   [4] = {
-    ["filterName"] = "The Molten Core\nGuildRaid",
+    ["filterName"] = "Ahn'Qiraj\nGuildRaid",
     ["filterZone"] = {
-      "The Molten Core",
+      "Ahn'Qiraj",
     },
     ["filterTag"] = {
       "Guild Raid"
     },
   },
   [5] = {
-    ["filterName"] = "Ahn'Qiraj + Blackwing Lair\nGuildRaid",
+    ["filterName"] = "Blackwing Lair + Ahn'Qiraj\nGuildRaid",
     ["filterZone"] = {
-      "Ruins of Ahn'Qiraj",      
       "Blackwing Lair",
+      "Ahn'Qiraj",
     },
     ["filterTag"] = {
       "Guild Raid"
@@ -78,32 +78,19 @@ filterList = {
 }
 
 
-
-
-
-
-
-
-
-function RaidTrackerUI_CreateFilters()
-
-
+function RaidTrackerUI_CreateFilters(self)
   if not filtersCreated then
       for k, v in pairs(filterList) do
-        RaidTrackerUI_CreateFilterFrame(k)
+        RaidTrackerUI_CreateFilterFrame(self, k)
       end
       filtersCreated = true
   end
-
-
-
 end
 
 
-function RaidTrackerUI_CreateFilterFrame(filterNr)
-
+function RaidTrackerUI_CreateFilterFrame(self, filterNr)
+  local fontString
   local row = math.floor( (filterNr - 1) / 4)
-
   local backdrop = {
     bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
     edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
@@ -119,10 +106,10 @@ function RaidTrackerUI_CreateFilterFrame(filterNr)
   FilterFrame[filterNr]:SetHeight(50)
   FilterFrame[filterNr]:SetBackdrop(backdrop)
   FilterFrame[filterNr]:SetScript("OnClick", RaidTrackerUI_UpdateStats)
-  FilterFrame[filterNr]:SetFont("Fonts\\FRIZQT__.TTF", 11)
-  FilterFrame[filterNr]:SetText(filterList[filterNr].filterName)
+  fontString = FilterFrame[filterNr]:CreateFontString("HIGHLIGHT")
+  fontString:SetFont("Fonts\\FRIZQT__.TTF", 10)
+  fontString:SetPoint("CENTER")
+  fontString:SetText(filterList[filterNr].filterName)
+  FilterFrame[filterNr].Text = fontString
   FilterFrame[filterNr]:SetID(filterNr)
-
-
-
 end

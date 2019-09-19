@@ -8,7 +8,7 @@ function postRecordedRaids()
       raidIDAsMessage = raidIDAsMessage .. "key:" .. k
       raidIDAsMessage = raidIDAsMessage .. "zone:" .. tbl.zone
       
-      SendAddonMessage(addonPrefix .. "raidID", raidIDAsMessage .. "record_end", "RAID")
+      C_ChatInfo.SendAddonMessage(addonPrefix .. "raidID", raidIDAsMessage .. "record_end", "RAID")
       raidIDAsMessage = ""
     end
   end
@@ -44,7 +44,7 @@ function requestIfMissing(record, sender)
   end
   
   table.insert(requestedRaids, record)
-  SendAddonMessage(addonPrefix .. "request" .. sender, record, "RAID")
+  C_ChatInfo.SendAddonMessage(addonPrefix .. "request" .. sender, record, "RAID")
 end
 
 function sendRequestedRaid(record, sender)
@@ -59,18 +59,18 @@ function sendRequestedRaid(record, sender)
   
   recordAsMessage = "key:" .. key .. "zone:" .. zone .. "date:" .. RaidAttendance[key].date ..
                     "tag:" .. RaidAttendance[key].tag .. "creator:" .. RaidAttendance[key].creator
-  SendAddonMessage(addonPrefix .. "part" .. sender, "record" .. recordAsMessage, "RAID")
+  C_ChatInfo.SendAddonMessage(addonPrefix .. "part" .. sender, "record" .. recordAsMessage, "RAID")
   recordAsMessage = ""
   
   for member, tbl in pairs(RaidAttendance[key].member) do
     recordAsMessage = recordAsMessage .. "member:" .. numMember .. member .. ";" .. tbl.class
     numMember = numMember + 1
     if string.len(recordAsMessage) > 226 then
-      SendAddonMessage(addonPrefix .. "part" .. sender, recordAsMessage, "RAID")
+      C_ChatInfo.SendAddonMessage(addonPrefix .. "part" .. sender, recordAsMessage, "RAID")
       recordAsMessage = ""
     end
   end
-  SendAddonMessage(addonPrefix .. "part" .. sender, recordAsMessage .. "record_end", "RAID")
+  C_ChatInfo.SendAddonMessage(addonPrefix .. "part" .. sender, recordAsMessage .. "record_end", "RAID")
 end
 
 function saveRecievedRaid(record)
