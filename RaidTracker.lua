@@ -108,6 +108,8 @@ end
 function chatMsgAddonHandler(prefix, message, channel, sender)
   local versions = {}
   
+  pPrint("Addon Msg Handler")
+  
   -- version checking
   if prefix == addonPrefix and 
      message == "versioncheck" and
@@ -120,6 +122,7 @@ function chatMsgAddonHandler(prefix, message, channel, sender)
   -- syncing
   elseif prefix == addonPrefix and
          message == "sync" then
+    pPrint("got Sync request")
     postRecordedRaids()
   elseif prefix == addonPrefix .. "raidID" and
          sender ~= me then
@@ -144,7 +147,7 @@ function chatMsgAddonHandler(prefix, message, channel, sender)
   elseif prefix == addonPrefix .. "tagRequest" and
          sender ~= me then
     if RaidAttendance[selectActiveRaid()] ~= nil then
-      C_ChatInfo.SendAddonMessage(addonPrefix .. "tagResponse" .. sender, RaidAttendance[selectActiveRaid()].tag, "RAID")
+      C_ChatInfo.SendAddonMessage(addonPrefix .. "tagResponse" .. sender, RaidAttendance[selectActiveRaid()].tag, chatType)
     end
   elseif prefix == addonPrefix .. "tagResponse" .. me and
        sender ~= me then
@@ -153,7 +156,7 @@ function chatMsgAddonHandler(prefix, message, channel, sender)
 end
 
 function postVersion()
-  C_ChatInfo.SendAddonMessage(addonPrefix .. "Version", me .. " - " .. getVersion(), "RAID")
+  C_ChatInfo.SendAddonMessage(addonPrefix .. "Version", me .. " - " .. getVersion(), chatType)
 end
 
 -- ----------------------------------------------------------------------------
@@ -241,10 +244,10 @@ function RaidTracker_Command(msg)
   
   elseif(cmd == "check") then
     pPrint(me .. " - " .. getVersion());
-    C_ChatInfo.SendAddonMessage(addonPrefix, "versioncheck", "RAID")
+    C_ChatInfo.SendAddonMessage(addonPrefix, "versioncheck", chatType)
   
   elseif(cmd == "sync") then
-    C_ChatInfo.SendAddonMessage(addonPrefix, "sync", "RAID")
+    C_ChatInfo.SendAddonMessage(addonPrefix, "sync", chatType)
   
   elseif(cmd == "edittag") then
     if currentlySelectedRaid ~= "" then

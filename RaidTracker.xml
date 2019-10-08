@@ -264,7 +264,7 @@
           </Anchors>
         <Scripts>
           <OnMouseUp>
-            C_ChatInfo.SendAddonMessage(addonPrefix, "sync", "RAID")
+            RaidTrackerSync_SendSyncRequest()
           </OnMouseUp>
         </Scripts>
         <Backdrop edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">

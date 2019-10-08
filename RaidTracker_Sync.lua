@@ -1,4 +1,6 @@
 requestedRaids = {}
+chatType = "GUILD"
+
 
 function postRecordedRaids()
   local raidIDAsMessage = ""
@@ -8,7 +10,7 @@ function postRecordedRaids()
       raidIDAsMessage = raidIDAsMessage .. "key:" .. k
       raidIDAsMessage = raidIDAsMessage .. "zone:" .. tbl.zone
       
-      C_ChatInfo.SendAddonMessage(addonPrefix .. "raidID", raidIDAsMessage .. "record_end", "RAID")
+      C_ChatInfo.SendAddonMessage(addonPrefix .. "raidID", raidIDAsMessage .. "record_end", chatType)
       raidIDAsMessage = ""
     end
   end
@@ -44,7 +46,7 @@ function requestIfMissing(record, sender)
   end
   
   table.insert(requestedRaids, record)
-  C_ChatInfo.SendAddonMessage(addonPrefix .. "request" .. sender, record, "RAID")
+  C_ChatInfo.SendAddonMessage(addonPrefix .. "request" .. sender, record, chatType)
 end
 
 function sendRequestedRaid(record, sender)
@@ -59,18 +61,18 @@ function sendRequestedRaid(record, sender)
   
   recordAsMessage = "key:" .. key .. "zone:" .. zone .. "date:" .. RaidAttendance[key].date ..
                     "tag:" .. RaidAttendance[key].tag .. "creator:" .. RaidAttendance[key].creator
-  C_ChatInfo.SendAddonMessage(addonPrefix .. "part" .. sender, "record" .. recordAsMessage, "RAID")
+  C_ChatInfo.SendAddonMessage(addonPrefix .. "part" .. sender, "record" .. recordAsMessage, chatType)
   recordAsMessage = ""
   
   for member, tbl in pairs(RaidAttendance[key].member) do
     recordAsMessage = recordAsMessage .. "member:" .. numMember .. member .. ";" .. tbl.class
     numMember = numMember + 1
     if string.len(recordAsMessage) > 226 then
-      C_ChatInfo.SendAddonMessage(addonPrefix .. "part" .. sender, recordAsMessage, "RAID")
+      C_ChatInfo.SendAddonMessage(addonPrefix .. "part" .. sender, recordAsMessage, chatType)
       recordAsMessage = ""
     end
   end
-  C_ChatInfo.SendAddonMessage(addonPrefix .. "part" .. sender, recordAsMessage .. "record_end", "RAID")
+  C_ChatInfo.SendAddonMessage(addonPrefix .. "part" .. sender, recordAsMessage .. "record_end", chatType)
 end
 
 function saveRecievedRaid(record)
@@ -127,6 +129,11 @@ function saveRecievedRaid(record)
   
   RaidAttendance[tonumber(key)] = fullRaid
   RaidTrackerUI_UpdateRaidlist()
+end
+
+function RaidTrackerSync_SendSyncRequest()
+  pPrint("Sending Sync Request")
+  C_ChatInfo.SendAddonMessage(addonPrefix, "sync", "GUILD")
 end
 
 function findNextMember(members, numNextMember)
