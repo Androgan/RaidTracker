@@ -68,6 +68,10 @@ function RaidTracker_OnEvent(event, ...)
     trackAttendance()
   end
   
+  if(event == "RAID_INSTANCE_WELCOME") then
+    trackAttendance()
+  end
+  
   if(event == "RAID_ROSTER_UPDATE") then
     rosterUpdateHandler()
   end
@@ -249,6 +253,9 @@ function RaidTracker_Command(msg)
       pPrint("Select a raid first")
     end
   
+  elseif(cmd == "track") then
+    trackAttendance()
+  
   else
     pPrint("Version " .. getVersion() .. " Usage:");
     pPrint("/rt gui - Opens up the RaidTracker Window.");
@@ -264,11 +271,12 @@ end
 -- ----------------------------------------------------------------------------
 
 function registerEvents(self)
-  self:RegisterEvent("ZONE_CHANGED_NEW_AREA");
+  -- self:RegisterEvent("ZONE_CHANGED_NEW_AREA");
   self:RegisterEvent("RAID_ROSTER_UPDATE");
   self:RegisterEvent("PLAYER_LOGOUT");
   self:RegisterEvent("ADDON_LOADED");
   self:RegisterEvent("CHAT_MSG_ADDON");
+  self:RegisterEvent("RAID_INSTANCE_WELCOME");
 end
 
 function pPrint(val)
@@ -301,7 +309,6 @@ end
 function getInstanceID()
   local id = 0
   _,_,_,_,_,_,_,id = GetInstanceInfo()
-  
   return id
 end
 
